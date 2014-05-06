@@ -1,9 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void menu();
-void clear_screen();
-
 int main(){
     menu();
     return 0;
@@ -12,7 +9,7 @@ int main(){
 void menu(){
     int menu;
     do{
-        printf("Menu:\n1- Reservar lavagem ou manutenção\n2- Cancelar reserva de lavagem ou manutenção\n3- Cancelar pré-reserva de lavagem ou manutenção\n4-  Listar reservas e pré-reservas\n0- Sair\n O que fazer? \n");
+        printf("Menu:\n1- Reservar lavagem ou manutenção\n2- Cancelar reserva de lavagem ou manutenção\n3- Cancelar pré-reserva de lavagem ou manutenção\n4-  Listar reservas e pré-reservas\n0- Sair\nO que fazer? \n");
         scanf("%d", &menu);
         switch(menu){
             case 0:
