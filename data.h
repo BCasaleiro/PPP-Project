@@ -1,3 +1,5 @@
+#define MAX 101
+
 typedef struct rnode* reservas;
 typedef struct rnode {
     char op;
@@ -6,7 +8,7 @@ typedef struct rnode {
     int ano;
     int hora;
     int min;
-    char nome[61];
+    char nome[MAX];
     reservas next;
 } rnode;
 
@@ -16,9 +18,7 @@ typedef struct prnode{
     int dia;
     int mes;
     int ano;
-    int hora;
-    int min;
-    char nome[61];
+    char nome[MAX];
     prereservas next;
 }prnode;
 

@@ -3,10 +3,6 @@
 #include <string.h>
 #include "data.h"
 
-int main(){
-    return 0;
-}
-
 reservas create_reservas(){
     rnode* initial;
     initial=malloc(sizeof(rnode));
@@ -29,10 +25,11 @@ pre_reservas create_pre_reservas(){
     return NULL;
 }
 
-int insert_reserva(reservas r, int dia, int mes, int ano, int hora, int min, char nome[]){
+int insert_reserva(reservas r, char op, int dia, int mes, int ano, int hora, int min, char nome[]){
     rnode* ins;
     ins= malloc(sizeof(rnode));
     if(ins!=NULL){
+        ins->op= op;
         ins->dia= dia;
         ins->mes= mes;
         ins->ano= ano;
