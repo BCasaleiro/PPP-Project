@@ -1,10 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "data.h"
 #include "main.h"
 
+
 int main(){
-    reservas lista_reservas;
-    prereservas lista_pre;
+    reservas lista_reservas= create_reservas();
+    prereservas lista_pre= create_pre_reservas();
+    clear_screen();
     menu(lista_reservas, lista_pre);
     return 0;
 }
@@ -12,7 +15,7 @@ int main(){
 void menu(reservas lista_reservas, prereservas lista_pre){
     int menu;
     do{
-        printf("Menu:\n1- Reservar lavagem ou manutenção\n2- Cancelar reserva de lavagem ou manutenção\n3- Cancelar pré-reserva de lavagem ou manutenção\n4-  Listar reservas e pré-reservas\n0- Sair\nO que fazer? ");
+        printf("Menu:\n1- Reservar lavagem ou manutenção\n2- Cancelar reserva de lavagem ou manutenção\n3- Cancelar pré-reserva de lavagem ou manutenção\n4- Listar reservas e pré-reservas\n0- Sair\nO que fazer? ");
         scanf("%d", &menu); 
         getchar(); //eliminar o '\n' não lido pelo scanf
         switch(menu){
@@ -22,7 +25,7 @@ void menu(reservas lista_reservas, prereservas lista_pre){
                 break;
             case 1:
                 clear_screen();
-                reservas();
+                reserva(lista_reservas, lista_pre);
                 break;
             case 2:
                 break;
@@ -37,7 +40,7 @@ void menu(reservas lista_reservas, prereservas lista_pre){
     }while(menu!=0);
 }
 
-void reservas(reservas lista_reservas, prereservas lista_pre){
+void reserva(reservas lista_reservas, prereservas lista_pre){
     int menu;
     char op;
     printf("Reservar:\n1- Lavagem\n2- Manutenção\n0- Regressar ao menu principal\nO que reservar? ");
@@ -50,10 +53,14 @@ void reservas(reservas lista_reservas, prereservas lista_pre){
         case 1:
             clear_screen();
             printf("Reserva de Lavagem:\n");
-            char op='L';
-            reservar(op);
+            op='L';
+            reservar(lista_reservas, lista_pre, op);
             break;
         case 2:
+            clear_screen();
+            printf("Reserva de Manutenção:\n");
+            op= 'M';
+            reservar(lista_reservas, lista_pre, op);
             break;
         default:
             clear_screen();
@@ -62,7 +69,9 @@ void reservas(reservas lista_reservas, prereservas lista_pre){
 }
 
 void reservar(reservas lista_reservas, prereservas lista_pre, char op){
+    int flag=1;
     int reservado;
+    int pre_reservado;
     char nome[MAX];
     int dia;
     int mes;
@@ -75,9 +84,26 @@ void reservar(reservas lista_reservas, prereservas lista_pre, char op){
     scanf("%d-%d-%d", &dia, &mes, &ano);
     //Verificação da disponibilidade desse dia, se nao houver 
     //reencaminhar para as pré reservas.
+    if( /*Condição*/!1 ){
+        pre_reservado= insert_pre_reserva(lista_pre, op, dia, mes, ano, nome);
+        if(pre_reservado==0){
+            clear_screen();
+            printf("Reserva efectuada com sucesso!");
+        } else {
+            clear_screen();
+            printf("Falha ao efectuar a reserva!\n");
+        }
+    }
     //Se possivel indicar as horas disponiveis para esse dia
-    printf("Hora (hh:mm): ");
-    scanf("%d:%d", &hora, &min);
+    do{
+        printf("Hora (hh:mm): ");
+        scanf("%d:%d", &hora, &min);
+        if(hora>=8 && ((hora<=17 && op=='M') || (hora==17 && min<=30 && op=='L')) && min>=0 && min<60){
+            flag=0;
+        } else {
+            printf("%d:%d não é uma hora válida para reserva\n", hora, min);
+        }
+    }while(flag==1);
     reservado= insert_reserva(lista_reservas, op, dia, mes, ano, hora, min, nome);
     if(reservado==0){
         clear_screen();
@@ -86,10 +112,6 @@ void reservar(reservas lista_reservas, prereservas lista_pre, char op){
         clear_screen();
         printf("Falha ao efectuar a reserva!\n");
     }
-}
-
-void pre_reservar(prereservas lista_pre, char op){
-
 }
 
 void clear_screen(){

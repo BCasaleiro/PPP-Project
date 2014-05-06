@@ -14,7 +14,7 @@ reservas create_reservas(){
     return NULL;
 }
 
-pre_reservas create_pre_reservas(){
+prereservas create_pre_reservas(){
     prnode* initial;
     initial= malloc(sizeof(prnode));
     if(initial!= NULL){
@@ -35,7 +35,7 @@ int insert_reserva(reservas r, char op, int dia, int mes, int ano, int hora, int
         ins->ano= ano;
         ins->hora= hora;
         ins->min= min;
-        strcmp(ins->nome, nome);
+        strcpy(ins->nome, nome);
         ins->next= r->next;
         r->next=ins;
         return 0;
@@ -44,7 +44,7 @@ int insert_reserva(reservas r, char op, int dia, int mes, int ano, int hora, int
     return 1;
 }
 
-int insert_pre_reserva(preresevas pr, char op, int dia, int mes, int ano, char nome[]){
+int insert_pre_reserva(prereservas pr, char op, int dia, int mes, int ano, char nome[]){
     prnode*  ins;
     ins= malloc(sizeof(prnode));
     if(ins!=NULL){
@@ -52,7 +52,7 @@ int insert_pre_reserva(preresevas pr, char op, int dia, int mes, int ano, char n
         ins->dia= dia;
         ins->mes= mes;
         ins->ano= ano;
-        strcmp(ins->nome, nome);
+        strcpy(ins->nome, nome);
         ins->next= pr->next;
         pr->next= ins;
         return 0;
@@ -61,3 +61,4 @@ int insert_pre_reserva(preresevas pr, char op, int dia, int mes, int ano, char n
     return 1;
 
 }
+
