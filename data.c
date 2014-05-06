@@ -43,3 +43,21 @@ int insert_reserva(reservas r, char op, int dia, int mes, int ano, int hora, int
     printf("ERROR: returning 1!\n");
     return 1;
 }
+
+int insert_pre_reserva(preresevas pr, char op, int dia, int mes, int ano, char nome[]){
+    prnode*  ins;
+    ins= malloc(sizeof(prnode));
+    if(ins!=NULL){
+        ins->op= op;
+        ins->dia= dia;
+        ins->mes= mes;
+        ins->ano= ano;
+        strcmp(ins->nome, nome);
+        ins->next= pr->next;
+        pr->next= ins;
+        return 0;
+    }
+    printf("ERROR: returning 1!\n");
+    return 1;
+
+}
