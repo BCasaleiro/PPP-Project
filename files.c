@@ -58,6 +58,8 @@ void extrair_informacao_reservas(char input[]) {
 		nome[counter] = input[i];
 		counter++;
 	}
+	
+	nome[counter] = '\0';
 
 }
 
