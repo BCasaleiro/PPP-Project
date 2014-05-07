@@ -45,6 +45,7 @@ void extrair_informacao_reservas(reservas lista_reservas, char input[]) {
 	}
 	nome[counter] = '\0';
 
+	insert_reserva(lista_reservas, input[0], dia, mes, ano, hora, min, nome);
 }
 
 
