@@ -53,19 +53,21 @@ void reserva(reservas lista_reservas, prereservas lista_pre){
         case 1:
             clear_screen();
             printf("Reserva de Lavagem:\n");
-            op='L';
+            op ='L';
             reservar(lista_reservas, lista_pre, op);
             break;
         case 2:
             clear_screen();
             printf("Reserva de Manutenção:\n");
-            op= 'M';
+            op = 'M';
             reservar(lista_reservas, lista_pre, op);
             break;
         default:
             clear_screen();
             printf("%d não é uma opção válida! A regressar ao menu principal...\n", menu);
     }
+
+    
 }
 
 void reservar(reservas lista_reservas, prereservas lista_pre, char op){
