@@ -88,17 +88,19 @@ void reservar(reservas lista_reservas, prereservas lista_pre, char op){
         pre_reservado= insert_pre_reserva(lista_pre, op, dia, mes, ano, nome);
         if(pre_reservado==0){
             clear_screen();
-            printf("Reserva efectuada com sucesso!");
+            printf("Pré-Reserva efectuada com sucesso!");
+            return;
         } else {
             clear_screen();
-            printf("Falha ao efectuar a reserva!\n");
+            printf("Falha ao efectuar a pré-reserva!\n");
+            return;
         }
     }
     //Se possivel indicar as horas disponiveis para esse dia
     do{
         printf("Hora (hh:mm): ");
         scanf("%d:%d", &hora, &min);
-        if(hora>=8 && ((hora<=17 && op=='M') || (hora==17 && min<=30 && op=='L')) && min>=0 && min<60){
+        if(hora>=8 && ((hora<=17 && min==0 && op=='M') || (hora==17 && min<=30 && op=='L')) && min>=0 && min<60){
             flag=0;
         } else {
             printf("%d:%d não é uma hora válida para reserva\n", hora, min);
@@ -107,7 +109,7 @@ void reservar(reservas lista_reservas, prereservas lista_pre, char op){
     reservado= insert_reserva(lista_reservas, op, dia, mes, ano, hora, min, nome);
     if(reservado==0){
         clear_screen();
-        printf("Reserva efectuada com sucesso!");
+        printf("Reserva efectuada com sucesso!\n");
     } else {
         clear_screen();
         printf("Falha ao efectuar a reserva!\n");
