@@ -53,11 +53,13 @@ void extrair_informacao_reservas(char input[]) {
 void por_no_ficheiro_reservas(reservas lista) {
 
 	FILE *fp;
+	reservas aux = lista->next;
 
-	fp = fopen("reservas.txt", "a");
-
-	fprintf(fp, "%c %02d %02d %04d %02d %02d %s", lista->op, lista->dia, lista->mes, lista->ano, lista->hora, lista->min, lista->nome);
-
+	fp = fopen("reservas.txt", "w");
+	while(aux!=NULL) {
+		fprintf(fp, "%c %02d %02d %04d %02d %02d %s", lista->op, lista->dia, lista->mes, lista->ano, lista->hora, lista->min, lista->nome);
+		aux=aux->next;
+	}
 	fclose(fp);
 
 }
@@ -65,10 +67,14 @@ void por_no_ficheiro_reservas(reservas lista) {
 void por_no_ficheiro_prereserva(prereservas lista) {
 
 	FILE *fp;
+	prereservas aux = lista->next;
 
 	fp = fopen("prereservas.txt", "a");
 
-	fprintf(fp, "%c %02d %02d %04d %s\n", lista->op, lista->dia, lista->mes, lista->ano, lista->nome);
+	while(aux!=NULL) {
+		fprintf(fp, "%c %02d %02d %04d %s\n", lista->op, lista->dia, lista->mes, lista->ano, lista->nome);
+		aux = aux -> next;
+	}
 
 	fclose(fp);
 
