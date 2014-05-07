@@ -14,28 +14,25 @@ void print_informacao(reservas lista_reservas, prereservas lista_pre) {
 	char input[MAX];
 
 	FILE *fp;
-	fp = fopen("reservas.txt", "r");
-
-
-	while (fgets(input, 50, fp) != NULL) {
-		extrair_informacao_reservas(lista_reservas, input);
-		contador++;
-	}
-
-	fclose(fp);
-
-	
 	FILE *f;
-	f = fopen("reservas.txt", "r");
 
-	while (fgets(input, 50, f) != NULL) {
-		extrair_informacao_prereservas(lista_pre, input);
-		contador++;
+	fp = fopen("reservas.txt", "r");
+	f = fopen("prereservas.txt", "r");
+
+	if (fp != NULL) {
+		while (fgets(input, 50, fp) != NULL) {
+			extrair_informacao_reservas(lista_reservas, input);
+		}
+	}
+
+	if (f != NULL) {
+		while (fgets(input, 50, f) != NULL) {
+			extrair_informacao_prereservas(lista_pre, input);
+		}	
 	}
 
 	fclose(fp);
-
-
+	fclose(f);
 }
 
 void extrair_informacao_reservas(reservas lista_reservas, char input[]) {
@@ -104,7 +101,7 @@ void por_no_ficheiro_prereserva(prereservas lista) {
 	FILE *fp;
 	prereservas aux = lista->next;
 
-	fp = fopen("prereservas.txt", "a");
+	fp = fopen("prereservas.txt", "w");
 
 	while(aux!=NULL) {
 		fprintf(fp, "%c %02d %02d %04d %s\n", lista->op, lista->dia, lista->mes, lista->ano, lista->nome);
