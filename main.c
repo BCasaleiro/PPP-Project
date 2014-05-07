@@ -73,6 +73,7 @@ void reserva(reservas lista_reservas, prereservas lista_pre){
 
 void reservar(reservas lista_reservas, prereservas lista_pre, char op){
     int i;
+    int menu;
     int flag=1;
     int reservado;
     int pre_reservado;
@@ -94,23 +95,27 @@ void reservar(reservas lista_reservas, prereservas lista_pre, char op){
     //Verificação da disponibilidade desse dia, se nao houver 
     //reencaminhar para as pré reservas.
     if(verifica_vaga(lista_reservas, op, dia, mes, ano)== 1){
-        pre_reservado= insert_pre_reserva(lista_pre, op, dia, mes, ano, nome);
-        if(pre_reservado==0){
-            clear_screen();
-            printf("Pré-Reserva efectuada com sucesso!");
-            return;
-        } else {
-            clear_screen();
-            printf("Falha ao efectuar a pré-reserva!\n");
-            return;
+        printf("Deseja efectuar pré-reserva? (1- Sim)");
+        scanf("%d", &menu);
+        getchar();
+        if(menu==1){
+            pre_reservado= insert_pre_reserva(lista_pre, op, dia, mes, ano, nome);
+            if(pre_reservado==0){
+                clear_screen();
+                printf("Pré-Reserva efectuada com sucesso!");
+                return;
+            } else {
+                clear_screen();
+                printf("Falha ao efectuar a pré-reserva!\n");
+                return;
+            }
         }
     }
     //Se possivel indicar as horas disponiveis para esse dia
     do{
         printf("Hora (hh:mm): ");
         scanf("%02d:%02d", &hora, &min);
-        if(hora>=8 && hora <=18 && min>=0 && min<60){
-            printf("passa aqui!\n");
+        if(disponibilidade(lista_reservas, op, hora, min)==0){
             flag=0;
         } else {
             printf("%02d:%02d não é uma hora válida para reserva\n", hora, min);
@@ -136,7 +141,7 @@ int verifica_vaga(reservas lista_reservas, char op, int dia, int mes, int ano){
     int pmin_vaga;
     //Mete todas as reservas para o dia
     while(aux!=NULL){
-        if(op== aux->op && dia== aux->dia && mes== aux->mes && ano== aux->ano){
+        if(op==aux->op && dia== aux->dia && mes== aux->mes && ano== aux->ano){
             reservas[i][0]= aux->hora;
             reservas[i][1]= aux->min;
             i++;
@@ -148,21 +153,33 @@ int verifica_vaga(reservas lista_reservas, char op, int dia, int mes, int ano){
             phora_vaga= reservas[k+1][0]- reservas[k][0];
             pmin_vaga= reservas[k+1][0]- reservas[k][1];
             if(op=='M' && (phora_vaga>1 || (phora_vaga==1 && pmin_vaga>=0))){
-                printf("Manutenção disponivel entre as %02d:%02d e as %02d:%02d\n", reservas[k][0], reservas[k][1], reservas[k+1][0],reservas[k+1][1]);
+                printf("Manutenção disponivel entre as %02d:%02d e as %02d:%02d\n", reservas[k][0]+1, reservas[k][1], reservas[k+1][0],reservas[k+1][1]);
                 flag=0;
             } else if(op=='L' &&( phora_vaga>1 || ( phora_vaga==1 && abs(pmin_vaga)>=30 ) ||  (phora_vaga==0 && pmin_vaga>=30))){
-                printf("Lavagem disponivel entre as %02d:%02d e as %02d:%02d\n", reservas[k][0], reservas[k][1], reservas[k+1][0],reservas[k+1][1]);
+                if(reservas[k][1]+30<60){
+                    printf("Lavagem disponivel entre as %02d:%02d e as %02d:%02d\n", reservas[k][0], reservas[k][1]+30, reservas[k+1][0],reservas[k+1][1]);
+                } else if(reservas[k][1]+30>60){
+                    printf("Lavagem disponivel entre as %02d:%02d e as %02d:%02d\n", reservas[k][0]+1, reservas[k][1]-30, reservas[k+1][0],reservas[k+1][1]);
+                } else {
+                    printf("Lavagem disponivel entre as %02d:%02d e as %02d:%02d\n", reservas[k][0]+1, 0, reservas[k+1][0],reservas[k+1][1]);
+                }
                 flag=0;
             }
         }
     } else if(i==1){
         if(op=='M' && (8-reservas[0][0]>=1)){
             printf("Manutenção disponivel entre as %02d:%02d e as %02d:%02d\n", 8,0, reservas[0][0], reservas[0][1]);
-            printf("Manutenção disponivel entre as %02d:%02d e as %02d:%02d\n",reservas[0][0], reservas[0][1], 18, 0 );
+            printf("Manutenção disponivel entre as %02d:%02d e as %02d:%02d\n",reservas[0][0]+1, reservas[0][1], 18, 0 );
             flag=0;
         } else if(op=='L' && (reservas[0][0]-8>=1 || (reservas[0][0]-8==0 && reservas[0][1]>=30) )){
             printf("Lavagem disponivel entre as %02d:%02d e as %02d:%02d\n", 8,0, reservas[0][0], reservas[0][1]);
-            printf("Lavagem disponivel entre as %02d:%02d e as %02d:%02d\n",reservas[0][0], reservas[0][1], 18, 0 );
+            if(reservas[0][1]+30<60){
+                printf("Lavagem disponivel entre as %02d:%02d e as %02d:%02d\n", reservas[0][0], reservas[0][1]+30, 18,0);
+            } else if(reservas[0][1]+30>60){
+                printf("Lavagem disponivel entre as %02d:%02d e as %02d:%02d\n", reservas[0][0]+1, reservas[0][1]-30, 18, 0);
+            } else {
+                printf("Lavagem disponivel entre as %02d:%02d e as %02d:%02d\n", reservas[0][0]+1, 0, 18,0);
+            }
             flag=0;
         }
     } else {
@@ -170,6 +187,38 @@ int verifica_vaga(reservas lista_reservas, char op, int dia, int mes, int ano){
         flag=0;
     }
     return flag;
+}
+
+int disponibilidade(reservas lista_reservas, char op, int hora,int min){
+    reservas aux=lista_reservas->next;
+    if(hora<8 || hora>=18 || min<0 || min>=60){
+        return 1;
+    }
+    while(aux!=NULL){
+        if(op=='M' && aux->op== op){
+            if(hora==aux->hora && min>aux->min || hora+1>aux->hora && hora+1<aux->hora+1 && min>aux->min){
+                return 1;
+            } else if(hora==17 && min>0){
+                return 1;
+            }
+        } else if(op=='L' && aux->op== op){
+            if(min+30>60){
+                if(hora+1==aux->hora && min-30>aux->min || hora+1>aux->hora && hora+1<aux->hora+1 && min-30>aux->min){
+                    return 1;
+                }
+            } else if(min+30==60){
+                if(hora+1==aux->hora+1 && aux->min+30>60){
+                    return 1;
+                }
+            } else if(min+30<60){
+                if(hora==aux->hora && min+30>aux->min || hora==aux->hora && min+30<aux->min+30){
+                    return 1;
+                }
+            }
+        }
+        aux=aux->next;
+    }
+    return 0;
 }
 
 void clear_screen(){
