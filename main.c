@@ -9,6 +9,7 @@
 int main(){
     reservas lista_reservas= create_reservas();
     prereservas lista_pre= create_pre_reservas();
+    print_informacao(lista_reservas, lista_pre);
     clear_screen();
     menu(lista_reservas, lista_pre);
     return 0;
@@ -348,7 +349,7 @@ int disponibilidade(reservas lista_reservas, char op, int hora,int min){
 }
 
 void update_reservas(reservas lista) {   
-    
+
 }
 
 void update_prereservas(prereservas lista) {
