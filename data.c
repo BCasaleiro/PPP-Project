@@ -100,3 +100,78 @@ void delete_pre(prnode* anterior){
     anterior->next= anterior->next->next;
     free(aux);
 }
+
+int check_reservas(reservas lista_reservas){
+
+}
+
+int check_pre(prereservas lista_pre){
+
+}
+
+void sort(reservas lista_reservas, prereservas lista_pre, int menu){
+    reservas aux= lista_reservas;
+    prereservas auxpr= lista_pre;
+    reservas exchange;
+    reservas exchange2;
+    prereservas exchangepr;
+    prereservas exchangepr2;
+    //Ordenar reservas
+    while(aux->next->next!=NULL){
+        if(menu==1){
+            if(((aux->next)->ano< (aux->next->next)->ano) || 
+                ((aux->next)->ano == (aux->next->next)->ano && (aux->next)->mes> (aux->next->next)->mes) ||
+                ((aux->next)->ano == (aux->next->next)->ano && (aux->next)->mes== (aux->next->next)->mes && (aux->next)->dia> (aux->next->next)->dia)||
+                ((aux->next)->ano == (aux->next->next)->ano && (aux->next)->mes== (aux->next->next)->mes && (aux->next)->dia== (aux->next->next)->dia && (aux->next)->hora> (aux->next->next)->hora)||
+                ((aux->next)->ano == (aux->next->next)->ano && (aux->next)->mes== (aux->next->next)->mes && (aux->next)->dia== (aux->next->next)->dia && (aux->next)->hora== (aux->next->next)->hora && (aux->next)->min> (aux->next->next)->min)){
+
+                exchange=aux->next->next->next;
+                exchange2=aux->next;
+                aux->next= aux->next->next;
+                (aux->next)->next=exchange2;
+                (aux->next->next)->next=exchange;
+            }
+        } else {
+            if(((aux->next)->ano> (aux->next->next)->ano) || 
+                ((aux->next)->ano == (aux->next->next)->ano && (aux->next)->mes< (aux->next->next)->mes) ||
+                ((aux->next)->ano == (aux->next->next)->ano && (aux->next)->mes== (aux->next->next)->mes && (aux->next)->dia< (aux->next->next)->dia)||
+                ((aux->next)->ano == (aux->next->next)->ano && (aux->next)->mes== (aux->next->next)->mes && (aux->next)->dia== (aux->next->next)->dia && (aux->next)->hora< (aux->next->next)->hora)||
+                ((aux->next)->ano == (aux->next->next)->ano && (aux->next)->mes== (aux->next->next)->mes && (aux->next)->dia== (aux->next->next)->dia && (aux->next)->hora== (aux->next->next)->hora && (aux->next)->min< (aux->next->next)->min)){
+
+                exchange=aux->next->next->next;
+                exchange2=aux->next;
+                aux->next= aux->next->next;
+                (aux->next)->next=exchange2;
+                (aux->next->next)->next=exchange;
+            }
+        }
+        aux=aux->next;
+    }
+    //Ordenar pré-reservas
+    while(auxpr->next->next!=NULL){
+        if(menu==1){
+            if(((auxpr->next)->ano< (auxpr->next->next)->ano) || 
+                ((auxpr->next)->ano == (auxpr->next->next)->ano && (auxpr->next)->mes> (auxpr->next->next)->mes) ||
+                ((auxpr->next)->ano == (auxpr->next->next)->ano && (auxpr->next)->mes== (auxpr->next->next)->mes && (auxpr->next)->dia> (auxpr->next->next)->dia))
+            {
+                exchangepr=auxpr->next->next->next;
+                exchangepr2=auxpr->next;
+                auxpr->next= auxpr->next->next;
+                (auxpr->next)->next=exchangepr2;
+                (auxpr->next->next)->next=exchangepr;
+            }
+        } else {
+            if(((auxpr->next)->ano> (auxpr->next->next)->ano) || 
+                ((auxpr->next)->ano == (auxpr->next->next)->ano && (auxpr->next)->mes< (auxpr->next->next)->mes) ||
+                ((auxpr->next)->ano == (auxpr->next->next)->ano && (auxpr->next)->mes== (auxpr->next->next)->mes && (auxpr->next)->dia< (auxpr->next->next)->dia))
+            {
+                exchangepr=auxpr->next->next->next;
+                exchangepr2=auxpr->next;
+                auxpr->next= auxpr->next->next;
+                (auxpr->next)->next=exchangepr2;
+                (auxpr->next->next)->next=exchangepr;
+            }
+        }           
+        auxpr=auxpr->next;
+    }
+}

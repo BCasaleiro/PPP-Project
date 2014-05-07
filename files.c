@@ -4,10 +4,6 @@
 #include "data.h"
 #include "files.h"
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 3e7b29183d6bee8fa3bd424b0e0404f095f10ae6
 void print_informacao(void) {
 
 	int contador = 0, linhas = 0;

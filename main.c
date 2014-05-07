@@ -153,9 +153,7 @@ void reservar(reservas lista_reservas, prereservas lista_pre, char op){
         if (contador >= 1 && data_valida(dia, mes, ano) == 0) {
             printf("Data incorrecta!\n");
         }
-        contador++;}
-    while (data_valida(dia, mes, ano) == 0);
-}
+        contador++;} while (data_valida(dia, mes, ano) == 0);
     //Verificação da disponibilidade desse dia, se nao houver 
     //reencaminhar para as pré reservas.
     if(verifica_vaga(lista_reservas, op, dia, mes, ano)== 1){
@@ -348,7 +346,7 @@ int disponibilidade(reservas lista_reservas, char op, int hora,int min){
     return 0;
 }
 
-void update_reservas(reserva lista) {   
+void update_reservas(reservas lista) {   
 
 }
 
@@ -391,6 +389,47 @@ int data_valida(int dia, int mes, int ano) {
             return 1;
         }
 
+    }
+}
+
+void listar(reservas lista_reservas, prereservas lista_pre){
+    int menu;
+    int submenu;
+    char op;
+    printf("Listar:\n1- Lavagens\n2- Manutenções\n0- Regressar ao menu principal\nO que listar?");
+    scanf("%d", &menu);
+    getchar();
+    switch(menu){
+        case 0:
+            clear_screen();
+            break;
+        case 1:
+            clear_screen();
+            printf("Ordenar:\n1- Mais recentes primeiro\n2- Mais antigas primeiro\n0-Regressar ao menu principal\nComo ordenar? ");
+            scanf("%d", &submenu);
+            getchar();
+            if(submenu==1 || submenu==2){
+                sort(lista_reservas, lista_pre, submenu);
+            } else {
+                printf("%d não é uma opção válida! A regressar ao menu principal...\n", submenu);
+                return;
+            }
+            break;
+        case 2:
+            clear_screen();
+            printf("Ordenar:\n1- Mais recentes primeiro\n2- Mais antigas primeiro\n0-Regressar ao menu principal\nComo ordenar? ");
+            scanf("%d", &submenu);
+            getchar();
+            if(submenu==1 || submenu==2){
+                sort(lista_reservas, lista_pre, submenu);
+            } else {
+                printf("%d não é uma opção válida! A regressar ao menu principal...\n", submenu);
+                return;
+            }
+            break;
+        default:
+            clear_screen();
+            printf("%d não é uma opção válida! A regressar ao menu principal...\n");
     }
 }
 
