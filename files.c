@@ -23,16 +23,16 @@ void print_informacao(reservas lista_reservas, prereservas lista_pre) {
 		while (fgets(input, 50, fp) != NULL) {
 			extrair_informacao_reservas(lista_reservas, input);
 		}
+		fclose(fp);
 	}
 
 	if (f != NULL) {
 		while (fgets(input, 50, f) != NULL) {
 			extrair_informacao_prereservas(lista_pre, input);
 		}	
+		fclose(f);
 	}
-
-	fclose(fp);
-	fclose(f);
+	
 }
 
 void extrair_informacao_reservas(reservas lista_reservas, char input[]) {
