@@ -39,6 +39,8 @@ void menu(reservas lista_reservas, prereservas lista_pre){
                 cancela_pre(lista_pre);
                 break;
             case 4:
+                clear_screen();
+                listar(lista_reservas, lista_pre);
                 break;
             default:
                 clear_screen();
@@ -398,6 +400,16 @@ void listar(reservas lista_reservas, prereservas lista_pre){
     int menu;
     int submenu;
     char op;
+    int reservas_lavagem=0;
+    int reservas_manutencao=0;
+    int pre_lavagem=0;
+    int pre_manutencao=0;
+    count_reservas(lista_reservas, &reservas_lavagem, &reservas_manutencao);
+    if(reservas_lavagem+reservas_manutencao==0){
+        printf("Nenhuma reserva para listar\n");
+        return;
+    }
+    count_pre(lista_pre, &pre_lavagem, &pre_manutencao);
     printf("Listar:\n1- Lavagens\n2- Manutenções\n0- Regressar ao menu principal\nO que listar?");
     scanf("%d", &menu);
     getchar();
@@ -407,26 +419,44 @@ void listar(reservas lista_reservas, prereservas lista_pre){
             break;
         case 1:
             clear_screen();
-            printf("Ordenar:\n1- Mais recentes primeiro\n2- Mais antigas primeiro\n0-Regressar ao menu principal\nComo ordenar? ");
-            scanf("%d", &submenu);
-            getchar();
-            if(submenu==1 || submenu==2){
-                sort(lista_reservas, lista_pre, submenu, 1);
-            } else {
-                printf("%d não é uma opção válida! A regressar ao menu principal...\n", submenu);
+            if(reservas_lavagem==1){
+                op='L';
+                imprimir_reservas(lista_reservas, op);
                 return;
+            } else {
+
+                op='L';
+                printf("Ordenar:\n1- Mais recentes primeiro\n2- Mais antigas primeiro\n0-Regressar ao menu principal\nComo ordenar? ");
+                scanf("%d", &submenu);
+                getchar();
+                if(submenu==1 || submenu==2){
+                    sort_reservas(lista_reservas, submenu);
+                    sort_pre(lista_pre, submenu);
+                    imprimir_reservas(lista_reservas, op);
+                    imprimir_pre(lista_pre, op);
+                } else {
+                    printf("%d não é uma opção válida! A regressar ao menu principal...\n", submenu);
+                    return;
+                }
             }
             break;
         case 2:
             clear_screen();
-            printf("Ordenar:\n1- Mais recentes primeiro\n2- Mais antigas primeiro\n0-Regressar ao menu principal\nComo ordenar? ");
-            scanf("%d", &submenu);
-            getchar();
-            if(submenu==1 || submenu==2){
-                sort(lista_reservas, lista_pre, submenu, 1);
-            } else {
-                printf("%d não é uma opção válida! A regressar ao menu principal...\n", submenu);
+            if(reservas_manutencao==1){
+                op='M';
+                imprimir_reservas(lista_reservas, op);
                 return;
+            } else {
+                printf("Ordenar:\n1- Mais recentes primeiro\n2- Mais antigas primeiro\n0-Regressar ao menu principal\nComo ordenar? ");
+                scanf("%d", &submenu);
+                getchar();
+                if(submenu==1 || submenu==2){
+                    sort_reservas(lista_reservas, submenu);
+                    sort_pre(lista_pre, submenu);
+                } else {
+                    printf("%d não é uma opção válida! A regressar ao menu principal...\n", submenu);
+                    return;
+                }
             }
             break;
         default:
@@ -435,22 +465,50 @@ void listar(reservas lista_reservas, prereservas lista_pre){
     }
 }
 
-void imprimir_reservas(reservas lista_reservas){
+void imprimir_reservas(reservas lista_reservas, char op){
     reservas aux= lista_reservas->next;
     printf("Reservas:\n");
     while(aux!=NULL){
-        printf("Reserva em nome de: %s\n", aux->nome);
-        printf("Reserva: %d/%d/%d pelas %d:%d\n\n", aux->dia, aux->mes, aux->ano, aux->hora, aux->min);
+        if(aux->op==op){
+            printf("Reserva em nome de: %s\n", aux->nome);
+            printf("Reserva: %d/%d/%d pelas %d:%d\n\n", aux->dia, aux->mes, aux->ano, aux->hora, aux->min);
+        }
         aux=aux->next;
     }
 }
 
-void imprimir_pre(prereservas lista_pre){
+void imprimir_pre(prereservas lista_pre, char op){
     prereservas aux= lista_pre->next;
     printf("Pré-Reservas:\n");
     while(aux!=NULL){
-        printf("Pré-reserva em nome de: %s\n", aux->nome);
-        printf("Pré-reserva: %d/%d/%d\n\n", aux->dia, aux->mes, aux->ano);
+        if(aux->op==op){
+            printf("Pré-reserva em nome de: %s\n", aux->nome);
+            printf("Pré-reserva: %d/%d/%d\n\n", aux->dia, aux->mes, aux->ano);
+        }
+        aux=aux->next;
+    }
+}
+
+void count_reservas(reservas lista_reservas, int* lav, int* man){
+    reservas aux= lista_reservas->next;
+    while(aux!=NULL){
+        if(aux->op=='M'){
+            *(man)++;
+        } else if(aux->op=='L'){
+            *(lav)++;
+        }
+        aux=aux->next;
+    }
+}
+
+void count_pre(prereservas lista_pre, int* lav, int* man){
+    prereservas aux= lista_pre->next;
+    while(aux!=NULL){
+        if(aux->op=='M'){
+            *(man)++;
+        } else if(aux->op=='L'){
+            *(lav)++;
+        }
         aux=aux->next;
     }
 }

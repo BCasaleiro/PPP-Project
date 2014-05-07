@@ -149,13 +149,10 @@ int check_pre(prereservas lista_pre, int menu){
     return 0;
 }
 
-void sort(reservas lista_reservas, prereservas lista_pre, int menu, int freservas){
+void sort_reservas(reservas lista_reservas, int menu){
     reservas aux= lista_reservas;
-    prereservas auxpr= lista_pre;
     reservas exchange;
     reservas exchange2;
-    prereservas exchangepr;
-    prereservas exchangepr2;
     //Ordenar reservas
     while(aux->next->next!=NULL){
         if(menu==1){
@@ -187,11 +184,18 @@ void sort(reservas lista_reservas, prereservas lista_pre, int menu, int freserva
         }
         aux=aux->next;
     }
-    if(check_reservas(lista_reservas, menu)==1 && freservas==1){
-        sort(lista_reservas, lista_pre, menu, freservas);
+    if(check_reservas(lista_reservas, menu)==1){
+        sort_reservas(lista_reservas, menu);
     } else {
-        freservas==0;
+        return;
     }
+
+}
+
+void sort_pre(prereservas lista_pre, int menu){
+    prereservas auxpr= lista_pre;
+    prereservas exchangepr;
+    prereservas exchangepr2;
     //Ordenar pré-reservas
     while(auxpr->next->next!=NULL){
         if(menu==1){
@@ -220,7 +224,7 @@ void sort(reservas lista_reservas, prereservas lista_pre, int menu, int freserva
         auxpr=auxpr->next;
     }
     if(check_pre(lista_pre, menu)==1){
-        sort(lista_reservas, lista_pre, menu, freservas);
+        sort_pre(lista_pre, menu);
     } else {
         return;
     }

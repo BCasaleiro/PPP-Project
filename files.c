@@ -83,6 +83,7 @@ void extrair_informacao_prereservas(prereservas lista_pre, char input[]) {
 	}
 	nome[counter] = '\0';
 
+	insert_pre_reserva(lista_pre, input[0], dia, mes, ano, nome);
 }
 
 
@@ -105,7 +106,7 @@ void por_no_ficheiro_prereserva(prereservas lista) {
 	FILE *fp;
 	prereservas aux = lista->next;
 
-	fp = fopen("prereservas.txt", "a");
+	fp = fopen("prereservas.txt", "w");
 
 	while(aux!=NULL) {
 		fprintf(fp, "%c %02d %02d %04d %s\n", lista->op, lista->dia, lista->mes, lista->ano, lista->nome);

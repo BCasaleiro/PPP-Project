@@ -32,4 +32,5 @@ prnode* find_ant_pre(prereservas lista_reservas, char nome[]);
 void delete_pre(prnode* anterior);
 int check_reservas(reservas lista_reservas, int menu);
 int check_pre(prereservas lista_pre, int menu);
-void sort(reservas lista_reservas, prereservas lista_pre, int menu, int freservas);
+void sort_reservas(reservas lista_reservas, int menu);
+void sort_pre(prereservas lista_pre, int menu);
