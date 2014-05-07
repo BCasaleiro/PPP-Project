@@ -71,6 +71,7 @@ void reserva(reservas lista_reservas, prereservas lista_pre){
 }
 
 void reservar(reservas lista_reservas, prereservas lista_pre, char op){
+    int i;
     int flag=1;
     int reservado;
     int pre_reservado;
