@@ -1,13 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "data.h"
 
 #define MAX 101
 
 void print_informacao(void);
-void extrair_informacao(char input[]);
-void por_no_ficheiro(char op, int dia, int mes, int ano, int hora, int min, char nome[]);
-void por_na_prereserva(char op, int dia, int mes, int ano, char nome[]);
+void extrair_informacao_reservas(char input[]);
+void extrair_informacao_prereservas(char input[]);
+void por_no_ficheiro_reservas(reservas lista);
+void por_no_ficheiro_prereserva(prereservas lista);
+void por_na_prereserva(prereservas lista);
 
 int main() {
 
@@ -18,29 +21,28 @@ int main() {
 
 void print_informacao(void) {
 
-	int contador = 0;
+	int contador = 0, linhas = 0;
+	char c;
 	char input[MAX];
 
 	FILE *fp;
-	fp = fopen("teste.txt", "r");
+	fp = fopen("reservas.txt", "r");
 
-	while (contador < 2) {
-		fgets(input, 50, fp);
-		extrair_informacao(input);
+
+	while (fgets(input, 50, fp) != NULL) {
+		extrair_informacao_reservas(input);
 		contador++;
 	}
 
 	fclose(fp);
 }
 
-void extrair_informacao(char input[]) {
+void extrair_informacao_reservas(char input[]) {
 
 	int i;
 	int dia, mes, ano, hora, min;
 	int counter = 0;
 	char nome[MAX];
-	char trabalho[MAX];
-	
 	
 	dia = (input[2] - '0') * 10 + (input[3] - '0');
 
@@ -52,40 +54,35 @@ void extrair_informacao(char input[]) {
 
 	min = (input[14] - '0') * 10 + (input[15] - '0');
 
-	for (i = 17; input[i] != 0; ++i) {
+	for (i = 17; input[i + 2] != 0; i++) {
 		nome[counter] = input[i];
 		counter++;
 	}
-
-	// "return" do dia mes ano hora min e nome guardado por linha"
-
-	/*if (input[0] == 'M')
-		lista_manutençao(dia, mes, ano, hora, min, nome)
-	else 
-		lista_lavagem(dia, mes, ano, hora, min, nome)*/
+	
+	nome[counter] = '\0';
 
 }
 
 
-void por_no_ficheiro(char op, int dia, int mes, int ano, int hora, int min, char nome[]) {
+void por_no_ficheiro_reservas(reservas lista) {
 
 	FILE *fp;
 
-	fp = fopen("teste.txt", "a");
+	fp = fopen("reservas.txt", "a");
 
-	fprintf(fp, "%c %02d %02d %02d %02d %02d %s", op, dia, mes, ano, hora, min, nome);
+	fprintf(fp, "%c %02d %02d %02d %02d %02d %s", lista->op, lista->dia, lista->mes, lista->ano, lista->hora, lista->min, lista->nome);
 
 	fclose(fp);
 
 }
 
-void por_na_prereserva(char op, int dia, int mes, int ano, char nome[]) {
+void por_no_ficheiro_prereserva(prereservas lista) {
 
 	FILE *fp;
 
-	fp = fopen("teste.txt", "a");
+	fp = fopen("prereservas.txt", "a");
 
-	fprintf(fp, "%c %02d %02d %02d %s", op, dia, mes, ano, nome);
+	fprintf(fp, "%c %02d %02d %02d %s\n", lista->op, lista->dia, lista->mes, lista->ano, lista->nome);
 
 	fclose(fp);
 

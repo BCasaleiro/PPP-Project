@@ -83,6 +83,11 @@ void reservar(reservas lista_reservas, prereservas lista_pre, char op){
     int min;
     printf("Nome: ");
     fgets(nome, MAX-1, stdin);
+    for (i = 0; nome[i] != 0; ++i) {
+        if (nome[i] == '\n') {
+            nome[i] = '\0';
+        }
+    }
     printf("Data (d-m-a): ");
     scanf("%d-%d-%d", &dia, &mes, &ano);
     //Verificação da disponibilidade desse dia, se nao houver 
