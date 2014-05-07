@@ -56,6 +56,7 @@ void reserva(reservas lista_reservas, prereservas lista_pre){
             printf("Reserva de Lavagem:\n");
             op ='L';
             reservar(lista_reservas, lista_pre, op);
+            //update();
             break;
         case 2:
             clear_screen();
@@ -103,6 +104,7 @@ void reservar(reservas lista_reservas, prereservas lista_pre, char op){
             if(pre_reservado==0){
                 clear_screen();
                 printf("Pré-Reserva efectuada com sucesso!");
+                //update_PREreservas();
                 return;
             } else {
                 clear_screen();
@@ -121,10 +123,12 @@ void reservar(reservas lista_reservas, prereservas lista_pre, char op){
             printf("%02d:%02d não é uma hora válida para reserva\n", hora, min);
         }
     }while(flag==1);
-    reservado= insert_reserva(lista_reservas, op, dia, mes, ano, hora, min, nome);
+    reservado = insert_reserva(lista_reservas, op, dia, mes, ano, hora, min, nome);
+
     if(reservado==0){
         clear_screen();
         printf("Reserva efectuada com sucesso!\n");
+        //update_reservas();
     } else {
         clear_screen();
         printf("Falha ao efectuar a reserva!\n");
@@ -219,6 +223,15 @@ int disponibilidade(reservas lista_reservas, char op, int hora,int min){
         aux=aux->next;
     }
     return 0;
+}
+
+void update_reservas(reserva lista) {   
+
+}
+
+void update_prereservas(prereservas lista) {
+
+
 }
 
 void clear_screen(){
