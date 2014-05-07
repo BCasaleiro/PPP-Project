@@ -1,6 +1,8 @@
-main: main.o data.o
-	gcc -o main main.o data.o
-main.o: main.c data.h
+main: main.o data.o files.o
+	gcc -o main main.o data.o files.o
+main.o: main.c data.h files.h
 	gcc -c main.c
 data.o: data.c
 	gcc -c data.c
+files.o:
+	gcc -c files.c
