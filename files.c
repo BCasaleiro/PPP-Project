@@ -67,25 +67,25 @@ void extrair_informacao(char input[]) {
 }
 
 
-void por_no_ficheiro(char op, int dia, int mes, int ano, int hora, int min, char nome[]) {
+void por_no_ficheiro(reservas lista) {
 
 	FILE *fp;
 
 	fp = fopen("teste.txt", "a");
 
-	fprintf(fp, "%c %02d %02d %02d %02d %02d %s", op, dia, mes, ano, hora, min, nome);
+	fprintf(fp, "%c %02d %02d %02d %02d %02d %s", lista->op, lista->dia, lista->mes, lista->ano, lista->hora, lista->min, lista->nome);
 
 	fclose(fp);
 
 }
 
-void por_na_prereserva(char op, int dia, int mes, int ano, char nome[]) {
+void por_na_prereserva(reservas lista) {
 
 	FILE *fp;
 
 	fp = fopen("teste.txt", "a");
 
-	fprintf(fp, "%c %02d %02d %02d %s", op, dia, mes, ano, nome);
+	fprintf(fp, "%c %02d %02d %02d %s", lista->op, lista->dia, lista->mes, lista->ano, lista->nome);
 
 	fclose(fp);
 
