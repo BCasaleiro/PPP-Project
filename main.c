@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include "data.h"
 #include "main.h"
 
@@ -86,7 +87,7 @@ void reservar(reservas lista_reservas, prereservas lista_pre, char op){
     scanf("%d-%d-%d", &dia, &mes, &ano);
     //Verificação da disponibilidade desse dia, se nao houver 
     //reencaminhar para as pré reservas.
-    if( /*Condição*/!1 ){
+    if(verifica_vaga(lista_reservas, op, dia, mes, ano)== 1){
         pre_reservado= insert_pre_reserva(lista_pre, op, dia, mes, ano, nome);
         if(pre_reservado==0){
             clear_screen();
@@ -101,11 +102,12 @@ void reservar(reservas lista_reservas, prereservas lista_pre, char op){
     //Se possivel indicar as horas disponiveis para esse dia
     do{
         printf("Hora (hh:mm): ");
-        scanf("%d:%d", &hora, &min);
-        if(hora>=8 && ((hora<=17 && min==0 && op=='M') || (hora==17 && min<=30 && op=='L')) && min>=0 && min<60){
+        scanf("%02d:%02d", &hora, &min);
+        if(hora>=8 && hora <=18 && min>=0 && min<60){
+            printf("passa aqui!\n");
             flag=0;
         } else {
-            printf("%d:%d não é uma hora válida para reserva\n", hora, min);
+            printf("%02d:%02d não é uma hora válida para reserva\n", hora, min);
         }
     }while(flag==1);
     reservado= insert_reserva(lista_reservas, op, dia, mes, ano, hora, min, nome);
@@ -116,6 +118,52 @@ void reservar(reservas lista_reservas, prereservas lista_pre, char op){
         clear_screen();
         printf("Falha ao efectuar a reserva!\n");
     }
+}
+
+int verifica_vaga(reservas lista_reservas, char op, int dia, int mes, int ano){
+    reservas aux= lista_reservas->next;
+    int flag=1;
+    int reservas[20][2];
+    int i=0;
+    int k;
+    int phora_vaga;
+    int pmin_vaga;
+    //Mete todas as reservas para o dia
+    while(aux!=NULL){
+        if(op== aux->op && dia== aux->dia && mes== aux->mes && ano== aux->ano){
+            reservas[i][0]= aux->hora;
+            reservas[i][1]= aux->min;
+            i++;
+        }
+        aux=aux->next;
+    }
+    if(i>1){
+        for(k=0;k<i-1;k++){
+            phora_vaga= reservas[k+1][0]- reservas[k][0];
+            pmin_vaga= reservas[k+1][0]- reservas[k][1];
+            if(op=='M' && (phora_vaga>1 || (phora_vaga==1 && pmin_vaga>=0))){
+                printf("Manutenção disponivel entre as %02d:%02d e as %02d:%02d\n", reservas[k][0], reservas[k][1], reservas[k+1][0],reservas[k+1][1]);
+                flag=0;
+            } else if(op=='L' &&( phora_vaga>1 || ( phora_vaga==1 && abs(pmin_vaga)>=30 ) ||  (phora_vaga==0 && pmin_vaga>=30))){
+                printf("Lavagem disponivel entre as %02d:%02d e as %02d:%02d\n", reservas[k][0], reservas[k][1], reservas[k+1][0],reservas[k+1][1]);
+                flag=0;
+            }
+        }
+    } else if(i==1){
+        if(op=='M' && (8-reservas[0][0]>=1)){
+            printf("Manutenção disponivel entre as %02d:%02d e as %02d:%02d\n", 8,0, reservas[0][0], reservas[0][1]);
+            printf("Manutenção disponivel entre as %02d:%02d e as %02d:%02d\n",reservas[0][0], reservas[0][1], 18, 0 );
+            flag=0;
+        } else if(op=='L' && (reservas[0][0]-8>=1 || (reservas[0][0]-8==0 && reservas[0][1]>=30) )){
+            printf("Lavagem disponivel entre as %02d:%02d e as %02d:%02d\n", 8,0, reservas[0][0], reservas[0][1]);
+            printf("Lavagem disponivel entre as %02d:%02d e as %02d:%02d\n",reservas[0][0], reservas[0][1], 18, 0 );
+            flag=0;
+        }
+    } else {
+        printf("Reserva disponivel entre as %02d:%02d e as %02d:%02d\n", 8, 0, 18, 0);
+        flag=0;
+    }
+    return flag;
 }
 
 void clear_screen(){

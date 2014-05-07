@@ -40,8 +40,8 @@ int insert_reserva(reservas r, char op, int dia, int mes, int ano, int hora, int
         r->next=ins;
         return 0;
     }
-
-    //por_no_ficheiro(op, dia, mes, ano, nome, hora, minuto)
+    //update
+    //por_no_ficheiro(r);
     printf("ERROR: returning 1!\n");
     return 1;
 }
