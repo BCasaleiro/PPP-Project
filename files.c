@@ -4,7 +4,7 @@
 #include "data.h"
 #include "files.h"
 
-void print_informacao(void) {
+void print_informacao(reservas lista_reservas, prereservas lista_prereservas) {
 
 	int contador = 0, linhas = 0;
 	char c;
@@ -15,11 +15,24 @@ void print_informacao(void) {
 
 
 	while (fgets(input, 50, fp) != NULL) {
-		extrair_informacao_reservas(input);
+		extrair_informacao_reservas(lista_reservas, input);
 		contador++;
 	}
 
 	fclose(fp);
+
+	
+	FILE *f;
+	f = fopen("reservas.txt", "r");
+
+	while (fgets(input, 50, f) != NULL) {
+		extrair_informacao_prereservas(lista_prereservas, input);
+		contador++;
+	}
+
+	fclose(fp);
+
+
 }
 
 void extrair_informacao_reservas(char input[]) {
