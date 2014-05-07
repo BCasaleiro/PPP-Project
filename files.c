@@ -48,16 +48,18 @@ void extrair_informacao_reservas(reservas lista_reservas, char input[]) {
 
 	ano = (input[8] - '0') * 1000 + (input[9] - '0') * 100 + (input[10] - '0') * 10 + (input[11] - '0');
 
-	hora = (input[14] - '0') * 10 + (input[15] - '0');
+	hora = (input[13] - '0') * 10 + (input[14] - '0');
 
-	min = (input[17] - '0') * 10 + (input[18] - '0');
+	min = (input[16] - '0') * 10 + (input[17] - '0');
 
-	for (i = 20; input[i + 2] != 0; i++) {
+	for (i = 19; input[i] != 0; i++) {
+		if(input[i]=='\n'){
+			input[i]='\0';
+		}
 		nome[counter] = input[i];
 		counter++;
 	}
-	nome[counter] = '\0';
-
+	printf("%d,%d,%d,%d,%d\n", dia, mes, ano, hora, min);
 	insert_reserva(lista_reservas, input[0], dia, mes, ano, hora, min, nome);
 }
 
@@ -74,7 +76,10 @@ void extrair_informacao_prereservas(prereservas lista_pre, char input[]) {
 
 	ano = (input[8] - '0') * 1000 + (input[9] - '0') * 100 + (input[10] - '0') * 10 + (input[11] - '0');
 
-	for (i = 13; input[i + 2] != 0; i++) {
+	for (i = 13; input[i] != 0; i++) {
+		if(input[i]=='\n'){
+			input[i]='\0';
+		}
 		nome[counter] = input[i];
 		counter++;
 	}
@@ -91,7 +96,7 @@ void por_no_ficheiro_reservas(reservas lista) {
 
 	fp = fopen("reservas.txt", "w");
 	while(aux!=NULL) {
-		fprintf(fp, "%c %02d %02d %04d %02d %02d %s", lista->op, lista->dia, lista->mes, lista->ano, lista->hora, lista->min, lista->nome);
+		fprintf(fp, "%c %02d %02d %04d %02d %02d %s\n", aux->op, aux->dia, aux->mes, aux->ano, aux->hora, aux->min, aux->nome);
 		aux=aux->next;
 	}
 	fclose(fp);
@@ -104,12 +109,10 @@ void por_no_ficheiro_prereserva(prereservas lista) {
 	prereservas aux = lista->next;
 
 	fp = fopen("prereservas.txt", "w");
-
 	while(aux!=NULL) {
-		fprintf(fp, "%c %02d %02d %04d %s\n", lista->op, lista->dia, lista->mes, lista->ano, lista->nome);
+		fprintf(fp, "%c %02d %02d %04d %s\n", aux->op, aux->dia, aux->mes, aux->ano, aux->nome);
 		aux = aux -> next;
 	}
-
 	fclose(fp);
 
 }

@@ -28,15 +28,18 @@ void menu(reservas lista_reservas, prereservas lista_pre){
                 break;
             case 1:
                 clear_screen();
-                reserva(lista_reservas, lista_pre);
+                reserva(lista_reservas, lista_pre);                
                 break;
             case 2:
                 clear_screen();
                 cancela(lista_reservas, lista_pre);
+                update_reservas(lista_reservas); //temporario!!
+                //update de encaixe pre-reserva
                 break;
             case 3:
                 clear_screen();
                 cancela_pre(lista_pre);
+                update_prereservas(lista_pre);
                 break;
             case 4:
                 clear_screen();
@@ -169,7 +172,7 @@ void reservar(reservas lista_reservas, prereservas lista_pre, char op){
             if(pre_reservado==0){
                 clear_screen();
                 printf("Pré-Reserva efectuada com sucesso!");
-                //update_PREreservas();
+                update_prereservas(lista_pre);
                 return;
             } else {
                 clear_screen();
@@ -193,7 +196,7 @@ void reservar(reservas lista_reservas, prereservas lista_pre, char op){
     if(reservado==0){
         clear_screen();
         printf("Reserva efectuada com sucesso!\n");
-        //update_reservas();
+        update_reservas(lista_reservas);
     } else {
         clear_screen();
         printf("Falha ao efectuar a reserva!\n");
@@ -215,12 +218,13 @@ void cancelar(reservas lista_reservas, char op){
             nome[i] = '\0';
         }
     }
-    ant= find_ant(lista_reservas, nome);
+    ant= find_ant(lista_reservas, nome, op);
     if(ant==NULL){
         printf("Reserva não encontrada! A regressar ao menu principal...\n");
         return;
     }
     delete_reserva(ant);
+
 }
 
 void cancelar_pre(prereservas lista_pre, char op){
@@ -238,12 +242,11 @@ void cancelar_pre(prereservas lista_pre, char op){
             nome[i] = '\0';
         }
     }
-    ant= find_ant_pre(lista_pre, nome);
+    ant= find_ant_pre(lista_pre, nome, op);
     if(ant==NULL){
         printf("Pré-reserva não encontrada! A regressar ao menu principal...\n");
         return;
     }
-    printf("Entra no delete\n");
     delete_pre(ant);
 }
 
@@ -256,6 +259,12 @@ int verifica_vaga(reservas lista_reservas, char op, int dia, int mes, int ano){
     int phora_vaga;
     int pmin_vaga;
     //Mete todas as reservas para o dia
+    int reservas_lavagem=0;
+    int reservas_manutencao=0;
+    count_reservas(lista_reservas, &reservas_lavagem, &reservas_manutencao);
+    if(reservas_lavagem+reservas_manutencao>1){
+        sort_reservas(lista_reservas, 1);
+    }
     while(aux!=NULL){
         if(op==aux->op && dia== aux->dia && mes== aux->mes && ano== aux->ano){
             reservas[i][0]= aux->hora;
@@ -266,13 +275,12 @@ int verifica_vaga(reservas lista_reservas, char op, int dia, int mes, int ano){
     }
     if(i>1){
         for(k=0;k<i-1;k++){
-            printf("ERROR!!\n");
             phora_vaga= reservas[k+1][0]- reservas[k][0];
             pmin_vaga= reservas[k+1][1]- reservas[k][1];
-            printf("Hora:%d e min:%d de diferença\n", phora_vaga, pmin_vaga);
             if(op=='M' && (phora_vaga>1 || (phora_vaga==1 && pmin_vaga>=0))){
                 printf("Manutenção disponivel entre as %02d:%02d e as %02d:%02d\n", reservas[k][0]+1, reservas[k][1], reservas[k+1][0],reservas[k+1][1]);
                 flag=0;
+                return flag;
             } else if(op=='L' &&( phora_vaga>1 || ( phora_vaga==1 && abs(pmin_vaga)>=30 ) ||  (phora_vaga==0 && pmin_vaga>=30))){
                 if(reservas[k][1]+30<60){
                     printf("Lavagem disponivel entre as %02d:%02d e as %02d:%02d\n", reservas[k][0], reservas[k][1]+30, reservas[k+1][0],reservas[k+1][1]);
@@ -282,6 +290,7 @@ int verifica_vaga(reservas lista_reservas, char op, int dia, int mes, int ano){
                     printf("Lavagem disponivel entre as %02d:%02d e as %02d:%02d\n", reservas[k][0]+1, 0, reservas[k+1][0],reservas[k+1][1]);
                 }
                 flag=0;
+                return flag;
             }
         }
     } else if(i==1){
@@ -294,21 +303,27 @@ int verifica_vaga(reservas lista_reservas, char op, int dia, int mes, int ano){
             flag=0;
         } else if(op=='L' && (reservas[0][0]-8>=1 || (reservas[0][0]-8==0 && reservas[0][1]>=30) )){
             printf("Lavagem disponivel entre as %02d:%02d e as %02d:%02d\n", 8,0, reservas[0][0], reservas[0][1]);
+            flag=0;
             if(reservas[0][1]+30<60){
                 printf("Lavagem disponivel entre as %02d:%02d e as %02d:%02d\n", reservas[0][0], reservas[0][1]+30, 18,0);
+                flag=0;
             } else if(reservas[0][1]+30>60){
                 printf("Lavagem disponivel entre as %02d:%02d e as %02d:%02d\n", reservas[0][0]+1, reservas[0][1]-30, 18, 0);
+                flag=0;
             } else {
                 printf("Lavagem disponivel entre as %02d:%02d e as %02d:%02d\n", reservas[0][0]+1, 0, 18,0);
+                flag=0;
             }
-            flag=0;
         } else if(op=='L' && reservas[0][0]==8){
             if(reservas[0][1]+30<60){
                 printf("Lavagem disponivel entre as %02d:%02d e as %02d:%02d\n", reservas[0][0], reservas[0][1]+30, 18,0);
+                flag=0;
             } else if(reservas[0][1]+30>60){
                 printf("Lavagem disponivel entre as %02d:%02d e as %02d:%02d\n", reservas[0][0]+1, reservas[0][1]-30, 18, 0);
+                flag=0;
             } else {
                 printf("Lavagem disponivel entre as %02d:%02d e as %02d:%02d\n", reservas[0][0]+1, 0, 18,0);
+                flag=0;
             }
         }
     } else {
@@ -350,13 +365,24 @@ int disponibilidade(reservas lista_reservas, char op, int hora,int min){
     return 0;
 }
 
-void update_reservas(reservas lista) {   
-
+void update_reservas(reservas lista) {
+    int reservas_lavagem=0;
+    int reservas_manutencao=0;
+    count_reservas(lista, &reservas_lavagem, &reservas_manutencao);
+    if(reservas_lavagem+reservas_manutencao>1){
+        sort_reservas(lista, 1);
+    }
+    por_no_ficheiro_reservas(lista);
 }
 
 void update_prereservas(prereservas lista) {
-
-
+    int pre_lavagem=0;
+    int pre_manutencao=0;
+    count_pre(lista, &pre_lavagem, &pre_manutencao);
+    if(pre_lavagem+pre_manutencao>1){
+        sort_pre(lista, 1);
+    }
+    por_no_ficheiro_prereserva(lista);
 }
 
 int data_valida(int dia, int mes, int ano) {
@@ -426,14 +452,18 @@ void listar(reservas lista_reservas, prereservas lista_pre){
             } else {
 
                 op='L';
+                clear_screen();
                 printf("Ordenar:\n1- Mais recentes primeiro\n2- Mais antigas primeiro\n0-Regressar ao menu principal\nComo ordenar? ");
                 scanf("%d", &submenu);
                 getchar();
                 if(submenu==1 || submenu==2){
                     sort_reservas(lista_reservas, submenu);
                     sort_pre(lista_pre, submenu);
+                    printf("sorted\n");
+                    clear_screen();
                     imprimir_reservas(lista_reservas, op);
                     imprimir_pre(lista_pre, op);
+                    printf("werid\n");
                 } else {
                     printf("%d não é uma opção válida! A regressar ao menu principal...\n", submenu);
                     return;
@@ -447,12 +477,15 @@ void listar(reservas lista_reservas, prereservas lista_pre){
                 imprimir_reservas(lista_reservas, op);
                 return;
             } else {
+                clear_screen();
                 printf("Ordenar:\n1- Mais recentes primeiro\n2- Mais antigas primeiro\n0-Regressar ao menu principal\nComo ordenar? ");
                 scanf("%d", &submenu);
                 getchar();
                 if(submenu==1 || submenu==2){
                     sort_reservas(lista_reservas, submenu);
                     sort_pre(lista_pre, submenu);
+                    imprimir_reservas(lista_reservas, op);
+                    imprimir_pre(lista_pre, op);
                 } else {
                     printf("%d não é uma opção válida! A regressar ao menu principal...\n", submenu);
                     return;
@@ -493,9 +526,9 @@ void count_reservas(reservas lista_reservas, int* lav, int* man){
     reservas aux= lista_reservas->next;
     while(aux!=NULL){
         if(aux->op=='M'){
-            *(man)++;
+            (*man)++;
         } else if(aux->op=='L'){
-            *(lav)++;
+            (*lav)++;
         }
         aux=aux->next;
     }
@@ -505,9 +538,9 @@ void count_pre(prereservas lista_pre, int* lav, int* man){
     prereservas aux= lista_pre->next;
     while(aux!=NULL){
         if(aux->op=='M'){
-            *(man)++;
+            (*man)++;
         } else if(aux->op=='L'){
-            *(lav)++;
+            (*lav)++;
         }
         aux=aux->next;
     }

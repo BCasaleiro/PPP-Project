@@ -63,11 +63,10 @@ int insert_pre_reserva(prereservas pr, char op, int dia, int mes, int ano, char 
     return 1;
 }
 
-rnode* find_ant(reservas lista_reservas, char nome[]){
+rnode* find_ant(reservas lista_reservas, char nome[], char op){
     reservas aux= lista_reservas;
     while(aux->next!=NULL){
-        printf("%s e %s enter now\n", nome, aux->nome);
-        if(strcmp(nome, aux->next->nome)==0){
+        if(strcmp(nome, aux->next->nome)==0 && aux->next->op==op){
             return aux;
         }
         aux=aux->next;
@@ -82,11 +81,11 @@ void delete_reserva(rnode* anterior){
     free(aux);
 }
 
-prnode* find_ant_pre(prereservas lista_reservas, char nome[]){
+prnode* find_ant_pre(prereservas lista_reservas, char nome[], char op){
     prereservas aux= lista_reservas;
     while(aux->next!=NULL){
-        printf("%s e %s enter now\n", nome, aux->nome);
-        if(strcmp(nome, aux->next->nome)==0){
+        printf("%s e %s enter now\n", nome, aux->next->nome);
+        if(strcmp(nome, aux->next->nome)==0 && aux->op==op){
             return aux;
         }
         aux=aux->next;
