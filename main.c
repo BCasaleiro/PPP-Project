@@ -11,6 +11,7 @@ void menu(){
     do{
         printf("Menu:\n1- Reservar lavagem ou manutenção\n2- Cancelar reserva de lavagem ou manutenção\n3- Cancelar pré-reserva de lavagem ou manutenção\n4-  Listar reservas e pré-reservas\n0- Sair\nO que fazer? \n");
         scanf("%d", &menu);
+        getchar(); //retira o \n
         switch(menu){
             case 0:
                 break;
@@ -29,6 +30,7 @@ void menu(){
     }while(menu!=0);
 }
 
-void clear_screen(){
+void clear_screen() {
+
     system("clear");
 }
