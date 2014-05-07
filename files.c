@@ -4,11 +4,10 @@
 #include "data.h"
 #include "files.h"
 
-<<<<<<< HEAD
-void print_informacao(reservas lista_reservas, prereservas lista_prereservas) {
-=======
+
+
 void print_informacao(reservas lista_reservas, prereservas lista_pre) {
->>>>>>> FETCH_HEAD
+
 
 	int contador = 0, linhas = 0;
 	char c;
@@ -30,7 +29,7 @@ void print_informacao(reservas lista_reservas, prereservas lista_pre) {
 	f = fopen("reservas.txt", "r");
 
 	while (fgets(input, 50, f) != NULL) {
-		extrair_informacao_prereservas(lista_prereservas, input);
+		extrair_informacao_prereservas(lista_pre, input);
 		contador++;
 	}
 
@@ -57,6 +56,27 @@ void extrair_informacao_reservas(reservas lista_reservas, char input[]) {
 	min = (input[17] - '0') * 10 + (input[18] - '0');
 
 	for (i = 20; input[i + 2] != 0; i++) {
+		nome[counter] = input[i];
+		counter++;
+	}
+	nome[counter] = '\0';
+
+}
+
+void extrair_informacao_prereservas(prereservas lista_pre, char input[]) {
+
+	int i;
+	int dia, mes, ano, hora, min;
+	int counter = 0;
+	char nome[MAX];
+	
+	dia = (input[2] - '0') * 10 + (input[3] - '0');
+
+	mes = (input[5] - '0') * 10 + (input[6] - '0');
+
+	ano = (input[8] - '0') * 1000 + (input[9] - '0') * 100 + (input[10] - '0') * 10 + (input[11] - '0');
+
+	for (i = 13; input[i + 2] != 0; i++) {
 		nome[counter] = input[i];
 		counter++;
 	}
