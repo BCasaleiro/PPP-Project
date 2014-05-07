@@ -153,7 +153,12 @@ void reservar(reservas lista_reservas, prereservas lista_pre, char op){
         if (contador >= 1 && data_valida(dia, mes, ano) == 0) {
             printf("Data incorrecta!\n");
         }
+<<<<<<< HEAD
         contador++;} while (data_valida(dia, mes, ano) == 0);
+=======
+        contador++;}
+    while (data_valida(dia, mes, ano) == 0);
+>>>>>>> 535b47abea6b4d07f8d7c9e4f8c9916b9fad1d80
     //Verificação da disponibilidade desse dia, se nao houver 
     //reencaminhar para as pré reservas.
     if(verifica_vaga(lista_reservas, op, dia, mes, ano)== 1){
