@@ -34,13 +34,13 @@ void extrair_informacao_reservas(char input[]) {
 
 	mes = (input[5] - '0') * 10 + (input[6] - '0');
 
-	ano = (input[8] - '0') * 10 + (input[9] - '0');
+	ano = (input[8] - '0') * 1000 + (input[9] - '0') * 100 + (input[10] - '0') * 10 + (input[11] - '0');
 
-	hora = (input[11] - '0') * 10 + (input[12] - '0');
+	hora = (input[14] - '0') * 10 + (input[15] - '0');
 
-	min = (input[14] - '0') * 10 + (input[15] - '0');
+	min = (input[17] - '0') * 10 + (input[18] - '0');
 
-	for (i = 17; input[i + 2] != 0; i++) {
+	for (i = 20; input[i + 2] != 0; i++) {
 		nome[counter] = input[i];
 		counter++;
 	}
@@ -56,7 +56,7 @@ void por_no_ficheiro_reservas(reservas lista) {
 
 	fp = fopen("reservas.txt", "a");
 
-	fprintf(fp, "%c %02d %02d %02d %02d %02d %s", lista->op, lista->dia, lista->mes, lista->ano, lista->hora, lista->min, lista->nome);
+	fprintf(fp, "%c %02d %02d %04d %02d %02d %s", lista->op, lista->dia, lista->mes, lista->ano, lista->hora, lista->min, lista->nome);
 
 	fclose(fp);
 
@@ -68,7 +68,7 @@ void por_no_ficheiro_prereserva(prereservas lista) {
 
 	fp = fopen("prereservas.txt", "a");
 
-	fprintf(fp, "%c %02d %02d %02d %s\n", lista->op, lista->dia, lista->mes, lista->ano, lista->nome);
+	fprintf(fp, "%c %02d %02d %04d %s\n", lista->op, lista->dia, lista->mes, lista->ano, lista->nome);
 
 	fclose(fp);
 
