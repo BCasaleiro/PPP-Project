@@ -2,10 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX 100
+#define MAX 101
 
 void print_informacao(void);
-void imprimir(char input[]);
+void extrair_informacao(char input[]);
+void por_no_ficheiro(char op, int dia, int mes, int ano, int hora, int min, char nome[]);
+void por_na_prereserva(char op, int dia, int mes, int ano, char nome[]);
 
 int main() {
 
@@ -24,22 +26,20 @@ void print_informacao(void) {
 
 	while (contador < 2) {
 		fgets(input, 50, fp);
-		imprimir(input);
+		extrair_informacao(input);
 		contador++;
 	}
 
 	fclose(fp);
 }
 
-void imprimir(char input[]) {
+void extrair_informacao(char input[]) {
 
 	int i;
-	int dia, mes, ano, hora, minutos;
+	int dia, mes, ano, hora, min;
 	int counter = 0;
 	char nome[MAX];
 	char trabalho[MAX];
-	char manu[] = "Manutencao";
-	char lava[] = "Lavagem";
 	
 	
 	dia = (input[2] - '0') * 10 + (input[3] - '0');
@@ -50,17 +50,44 @@ void imprimir(char input[]) {
 
 	hora = (input[11] - '0') * 10 + (input[12] - '0');
 
-	minutos = (input[14] - '0') * 10 + (input[15] - '0');
+	min = (input[14] - '0') * 10 + (input[15] - '0');
 
-	for (i = 17; input[i] != '\n'; ++i) {
+	for (i = 17; input[i] != 0; ++i) {
 		nome[counter] = input[i];
 		counter++;
 	}
 
-	if (input[0] == 'M')
-		//lista_manutençao(dia, mes, ano, hora, minutos, nome)
-	else 
-		//lista_lavagem(dia, mes, ano, hora, minutos, nome)
+	// "return" do dia mes ano hora min e nome guardado por linha"
 
-	//printf("Têm agendado uma %s para as %d:%d do dia %d/%d/%d em nome de %s.\n", trabalho, hora, minutos, dia, mes, ano, nome);
+	/*if (input[0] == 'M')
+		lista_manutençao(dia, mes, ano, hora, min, nome)
+	else 
+		lista_lavagem(dia, mes, ano, hora, min, nome)*/
+
 }
+
+
+void por_no_ficheiro(char op, int dia, int mes, int ano, int hora, int min, char nome[]) {
+
+	FILE *fp;
+
+	fp = fopen("teste.txt", "a");
+
+	fprintf(fp, "%c %02d %02d %02d %02d %02d %s", op, dia, mes, ano, hora, min, nome);
+
+	fclose(fp);
+
+}
+
+void por_na_prereserva(char op, int dia, int mes, int ano, char nome[]) {
+
+	FILE *fp;
+
+	fp = fopen("teste.txt", "a");
+
+	fprintf(fp, "%c %02d %02d %02d %s", op, dia, mes, ano, nome);
+
+	fclose(fp);
+
+}
+
