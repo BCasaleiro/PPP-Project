@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include "data.h"
+#include "files.h"
 #include "main.h"
 
 
@@ -29,8 +30,12 @@ void menu(reservas lista_reservas, prereservas lista_pre){
                 reserva(lista_reservas, lista_pre);
                 break;
             case 2:
+                clear_screen();
+                cancela(lista_reservas, lista_pre);
                 break;
             case 3:
+                clear_screen();
+                cancela_pre(lista_pre);
                 break;
             case 4:
                 break;
@@ -66,9 +71,59 @@ void reserva(reservas lista_reservas, prereservas lista_pre){
         default:
             clear_screen();
             printf("%d não é uma opção válida! A regressar ao menu principal...\n", menu);
-    }
+    }   
+}
 
-    
+void cancela(reservas lista_reservas, prereservas lista_pre){
+    int menu;
+    char op;
+    printf("Cancelar:\n1- Lavagem\n2- Manutenção\n0- Regressar ao menu principal\nO que cancelar? ");
+    scanf("%d", &menu);
+    getchar();
+    switch(menu){
+        case 0:
+            clear_screen();
+            break;
+        case 1:
+            clear_screen();
+            op='L';
+            cancelar(lista_reservas, op);
+            break;
+        case 2:
+            clear_screen();
+            op='M';
+            cancelar(lista_reservas, op);
+            break;
+        default:
+            clear_screen();
+            printf("%d não é uma opção válida! A regressar ao menu principal...\n", menu);
+    }
+}
+
+void cancela_pre(prereservas lista_pre){
+    int menu;
+    char op;
+    printf("Cancelar:\n1- Lavagem\n2- Manutenção\n0- Regressar ao menu principal\nO que cancelar? ");
+    scanf("%d", &menu);
+    getchar();
+    switch(menu){
+        case 0:
+            clear_screen();
+            break;
+        case 1:
+            clear_screen();
+            op='L';
+            cancelar_pre(lista_pre, op);
+            break;
+        case 2:
+            clear_screen();
+            op='M';
+            cancelar_pre(lista_pre, op);
+            break;
+        default:
+            clear_screen();
+            printf("%d não é uma opção válida! A regressar ao menu principal...\n", menu);
+    }
 }
 
 void reservar(reservas lista_reservas, prereservas lista_pre, char op){
@@ -131,6 +186,53 @@ void reservar(reservas lista_reservas, prereservas lista_pre, char op){
     }
 }
 
+void cancelar(reservas lista_reservas, char op){
+    char nome[MAX];
+    rnode* ant;
+    int i;
+    if(op=='M'){
+        printf("Cancelar reserva de manutenção em nome de: ");
+    } else {
+        printf("Cancelar reserva de lavagem em nome de: ");
+    }
+    fgets(nome, MAX-1, stdin);
+    for (i= 0; nome[i]!= 0; ++i) {
+        if (nome[i] == '\n') {
+            nome[i] = '\0';
+        }
+    }
+    ant= find_ant(lista_reservas, nome);
+    if(ant==NULL){
+        printf("Reserva não encontrada! A regressar ao menu principal...\n");
+        return;
+    }
+    delete_reserva(ant);
+}
+
+void cancelar_pre(prereservas lista_pre, char op){
+    char nome[MAX];
+    prnode* ant;
+    int i;
+    if(op=='M'){
+        printf("Cancelar pré-reserva de manutenção em nome de: ");
+    } else {
+        printf("Cancelar pré-reserva de lavagem em nome de: ");
+    }
+    fgets(nome, MAX-1, stdin);
+    for (i= 0; nome[i]!= 0; ++i) {
+        if (nome[i] == '\n') {
+            nome[i] = '\0';
+        }
+    }
+    ant= find_ant_pre(lista_pre, nome);
+    if(ant==NULL){
+        printf("Pré-reserva não encontrada! A regressar ao menu principal...\n");
+        return;
+    }
+    printf("Entra no delete\n");
+    delete_pre(ant);
+}
+
 int verifica_vaga(reservas lista_reservas, char op, int dia, int mes, int ano){
     reservas aux= lista_reservas->next;
     int flag=1;
@@ -150,8 +252,10 @@ int verifica_vaga(reservas lista_reservas, char op, int dia, int mes, int ano){
     }
     if(i>1){
         for(k=0;k<i-1;k++){
+            printf("ERROR!!\n");
             phora_vaga= reservas[k+1][0]- reservas[k][0];
-            pmin_vaga= reservas[k+1][0]- reservas[k][1];
+            pmin_vaga= reservas[k+1][1]- reservas[k][1];
+            printf("Hora:%d e min:%d de diferença\n", phora_vaga, pmin_vaga);
             if(op=='M' && (phora_vaga>1 || (phora_vaga==1 && pmin_vaga>=0))){
                 printf("Manutenção disponivel entre as %02d:%02d e as %02d:%02d\n", reservas[k][0]+1, reservas[k][1], reservas[k+1][0],reservas[k+1][1]);
                 flag=0;
@@ -167,8 +271,11 @@ int verifica_vaga(reservas lista_reservas, char op, int dia, int mes, int ano){
             }
         }
     } else if(i==1){
-        if(op=='M' && (8-reservas[0][0]>=1)){
+        if(op=='M' && (reservas[0][0]-8>=1)){
             printf("Manutenção disponivel entre as %02d:%02d e as %02d:%02d\n", 8,0, reservas[0][0], reservas[0][1]);
+            printf("Manutenção disponivel entre as %02d:%02d e as %02d:%02d\n",reservas[0][0]+1, reservas[0][1], 18, 0 );
+            flag=0;
+        }else if(op=='M' && reservas[0][0]==8){
             printf("Manutenção disponivel entre as %02d:%02d e as %02d:%02d\n",reservas[0][0]+1, reservas[0][1], 18, 0 );
             flag=0;
         } else if(op=='L' && (reservas[0][0]-8>=1 || (reservas[0][0]-8==0 && reservas[0][1]>=30) )){
@@ -181,6 +288,14 @@ int verifica_vaga(reservas lista_reservas, char op, int dia, int mes, int ano){
                 printf("Lavagem disponivel entre as %02d:%02d e as %02d:%02d\n", reservas[0][0]+1, 0, 18,0);
             }
             flag=0;
+        } else if(op=='L' && reservas[0][0]==8){
+            if(reservas[0][1]+30<60){
+                printf("Lavagem disponivel entre as %02d:%02d e as %02d:%02d\n", reservas[0][0], reservas[0][1]+30, 18,0);
+            } else if(reservas[0][1]+30>60){
+                printf("Lavagem disponivel entre as %02d:%02d e as %02d:%02d\n", reservas[0][0]+1, reservas[0][1]-30, 18, 0);
+            } else {
+                printf("Lavagem disponivel entre as %02d:%02d e as %02d:%02d\n", reservas[0][0]+1, 0, 18,0);
+            }
         }
     } else {
         printf("Reserva disponivel entre as %02d:%02d e as %02d:%02d\n", 8, 0, 18, 0);
@@ -196,7 +311,7 @@ int disponibilidade(reservas lista_reservas, char op, int hora,int min){
     }
     while(aux!=NULL){
         if(op=='M' && aux->op== op){
-            if(hora==aux->hora && min>aux->min || hora+1>aux->hora && hora+1<aux->hora+1 && min>aux->min){
+            if(hora==aux->hora && min>aux->min && hora+1>aux->hora && hora+1<aux->hora+1 && min>aux->min){
                 return 1;
             } else if(hora==17 && min>0){
                 return 1;

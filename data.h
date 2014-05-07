@@ -26,3 +26,4 @@ reservas create_reservas();
 prereservas create_pre_reservas();
 int insert_reserva(reservas r, char op, int dia, int mes, int ano, int hora, int min, char nome[]);
 int insert_pre_reserva(prereservas pr, char op, int dia, int mes, int ano, char nome[]);
+rnode* find_ant(reservas lista_reservas, char nome[]);

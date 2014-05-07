@@ -59,10 +59,44 @@ int insert_pre_reserva(prereservas pr, char op, int dia, int mes, int ano, char 
         pr->next= ins;
         return 0;
     }
-
-    //por_no_ficheiro(op, dia, mes, ano, nome)
     printf("ERROR: returning 1!\n");
     return 1;
-
 }
 
+rnode* find_ant(reservas lista_reservas, char nome[]){
+    reservas aux= lista_reservas;
+    while(aux->next!=NULL){
+        printf("%s e %s enter now\n", nome, aux->nome);
+        if(strcmp(nome, aux->next->nome)==0){
+            return aux;
+        }
+        aux=aux->next;
+    }
+    return NULL;
+}
+
+void delete_reserva(rnode* anterior){
+    rnode* aux;
+    aux=anterior->next;
+    anterior->next= anterior->next->next;
+    free(aux);
+}
+
+prnode* find_ant_pre(prereservas lista_reservas, char nome[]){
+    prereservas aux= lista_reservas;
+    while(aux->next!=NULL){
+        printf("%s e %s enter now\n", nome, aux->nome);
+        if(strcmp(nome, aux->next->nome)==0){
+            return aux;
+        }
+        aux=aux->next;
+    }
+    return NULL;
+}
+
+void delete_pre(prnode* anterior){
+    prnode* aux;
+    aux=anterior->next;
+    anterior->next= anterior->next->next;
+    free(aux);
+}
