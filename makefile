@@ -4,5 +4,5 @@ main.o: main.c data.h files.h
 	gcc -c main.c
 data.o: data.c
 	gcc -c data.c
-files.o:
+files.o: files.c
 	gcc -c files.c
