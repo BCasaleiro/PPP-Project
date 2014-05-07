@@ -155,7 +155,6 @@ void reservar(reservas lista_reservas, prereservas lista_pre, char op){
         }
         contador++;}
     while (data_valida(dia, mes, ano) == 0);
-}
     //Verificação da disponibilidade desse dia, se nao houver 
     //reencaminhar para as pré reservas.
     if(verifica_vaga(lista_reservas, op, dia, mes, ano)== 1){
@@ -348,7 +347,7 @@ int disponibilidade(reservas lista_reservas, char op, int hora,int min){
     return 0;
 }
 
-void update_reservas(reserva lista) {   
+void update_reservas(reservas lista) {   
 
 }
 
