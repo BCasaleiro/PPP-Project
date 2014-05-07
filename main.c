@@ -41,9 +41,9 @@ void menu(reservas lista_reservas, prereservas lista_pre){
                 break;
             default:
                 clear_screen();
-                printf("%d não é uma opção valida!\n", menu);
+                printf("%d não é uma opção válida!\n", menu);
         }
-    }while(menu!=0);
+    }while(menu != 0);
 }
 
 void reserva(reservas lista_reservas, prereservas lista_pre){
