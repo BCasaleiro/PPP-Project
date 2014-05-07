@@ -9,4 +9,7 @@ void cancelar(reservas lista_reservas, char op);
 void cancelar_pre(prereservas lista_pre, char op);
 int verifica_vaga(reservas lista_reservas, char op, int dia, int mes, int ano);
 int disponibilidade(reservas lista_reservas,char op, int hora,int min);
+void update_reservas(reserva lista);
+void update_prereservas(prereserva lista);
 void clear_screen();
+int data_valida(int dia, int mes, int ano);
