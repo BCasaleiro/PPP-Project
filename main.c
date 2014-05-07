@@ -348,7 +348,7 @@ int disponibilidade(reservas lista_reservas, char op, int hora,int min){
 }
 
 void update_reservas(reservas lista) {   
-
+    
 }
 
 void update_prereservas(prereservas lista) {
@@ -431,6 +431,26 @@ void listar(reservas lista_reservas, prereservas lista_pre){
         default:
             clear_screen();
             printf("%d não é uma opção válida! A regressar ao menu principal...\n", menu);
+    }
+}
+
+void imprimir_reservas(reservas lista_reservas){
+    reservas aux= lista_reservas->next;
+    printf("Reservas:\n");
+    while(aux!=NULL){
+        printf("Reserva em nome de: %s\n", aux->nome);
+        printf("Reserva: %d/%d/%d pelas %d:%d\n\n", aux->dia, aux->mes, aux->ano, aux->hora, aux->min);
+        aux=aux->next;
+    }
+}
+
+void imprimir_pre(prereservas lista_pre){
+    prereservas aux= lista_pre->next;
+    printf("Pré-Reservas:\n");
+    while(aux!=NULL){
+        printf("Pré-reserva em nome de: %s\n", aux->nome);
+        printf("Pré-reserva: %d/%d/%d\n\n", aux->dia, aux->mes, aux->ano);
+        aux=aux->next;
     }
 }
 
