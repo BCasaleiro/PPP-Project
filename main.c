@@ -9,6 +9,7 @@
 int main(){
     reservas lista_reservas= create_reservas();
     prereservas lista_pre= create_pre_reservas();
+    print_informacao(lista_reservas, lista_pre);
     clear_screen();
     menu(lista_reservas, lista_pre);
     return 0;
@@ -152,13 +153,9 @@ void reservar(reservas lista_reservas, prereservas lista_pre, char op){
         scanf("%d-%d-%d", &dia, &mes, &ano);
         if (contador >= 1 && data_valida(dia, mes, ano) == 0) {
             printf("Data incorrecta!\n");
+            contador++;
         }
-<<<<<<< HEAD
-        contador++;} while (data_valida(dia, mes, ano) == 0);
-=======
-        contador++;}
-    while (data_valida(dia, mes, ano) == 0);
->>>>>>> 535b47abea6b4d07f8d7c9e4f8c9916b9fad1d80
+    }while (data_valida(dia, mes, ano) == 0);
     //Verificação da disponibilidade desse dia, se nao houver 
     //reencaminhar para as pré reservas.
     if(verifica_vaga(lista_reservas, op, dia, mes, ano)== 1){
@@ -414,7 +411,7 @@ void listar(reservas lista_reservas, prereservas lista_pre){
             scanf("%d", &submenu);
             getchar();
             if(submenu==1 || submenu==2){
-                sort(lista_reservas, lista_pre, submenu);
+                sort(lista_reservas, lista_pre, submenu, 1);
             } else {
                 printf("%d não é uma opção válida! A regressar ao menu principal...\n", submenu);
                 return;
@@ -426,7 +423,7 @@ void listar(reservas lista_reservas, prereservas lista_pre){
             scanf("%d", &submenu);
             getchar();
             if(submenu==1 || submenu==2){
-                sort(lista_reservas, lista_pre, submenu);
+                sort(lista_reservas, lista_pre, submenu, 1);
             } else {
                 printf("%d não é uma opção válida! A regressar ao menu principal...\n", submenu);
                 return;
@@ -434,7 +431,27 @@ void listar(reservas lista_reservas, prereservas lista_pre){
             break;
         default:
             clear_screen();
-            printf("%d não é uma opção válida! A regressar ao menu principal...\n");
+            printf("%d não é uma opção válida! A regressar ao menu principal...\n", menu);
+    }
+}
+
+void imprimir_reservas(reservas lista_reservas){
+    reservas aux= lista_reservas->next;
+    printf("Reservas:\n");
+    while(aux!=NULL){
+        printf("Reserva em nome de: %s\n", aux->nome);
+        printf("Reserva: %d/%d/%d pelas %d:%d\n\n", aux->dia, aux->mes, aux->ano, aux->hora, aux->min);
+        aux=aux->next;
+    }
+}
+
+void imprimir_pre(prereservas lista_pre){
+    prereservas aux= lista_pre->next;
+    printf("Pré-Reservas:\n");
+    while(aux!=NULL){
+        printf("Pré-reserva em nome de: %s\n", aux->nome);
+        printf("Pré-reserva: %d/%d/%d\n\n", aux->dia, aux->mes, aux->ano);
+        aux=aux->next;
     }
 }
 

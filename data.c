@@ -101,15 +101,55 @@ void delete_pre(prnode* anterior){
     free(aux);
 }
 
-int check_reservas(reservas lista_reservas){
-
+int check_reservas(reservas lista_reservas, int menu){
+    reservas aux=lista_reservas->next;
+    while(aux->next!=NULL){
+        if(menu==1){
+            if((aux->ano<aux->next->ano)||
+                (aux->ano==aux->next->ano && aux->mes>aux->next->mes) ||
+                (aux->ano==aux->next->ano && aux->mes==aux->next->mes && aux->dia>aux->next->dia) ||
+                (aux->ano==aux->next->ano && aux->mes==aux->next->mes && aux->dia==aux->next->dia && aux->hora>aux->next->hora) ||
+                (aux->ano==aux->next->ano && aux->mes==aux->next->mes && aux->dia==aux->next->dia && aux->hora==aux->next->hora && aux->min>aux->next->min))
+            {
+                return 1;
+            }
+        } else {
+            if((aux->ano>aux->next->ano)||
+                (aux->ano==aux->next->ano && aux->mes<aux->next->mes) ||
+                (aux->ano==aux->next->ano && aux->mes==aux->next->mes && aux->dia<aux->next->dia) ||
+                (aux->ano==aux->next->ano && aux->mes==aux->next->mes && aux->dia==aux->next->dia && aux->hora<aux->next->hora) ||
+                (aux->ano==aux->next->ano && aux->mes==aux->next->mes && aux->dia==aux->next->dia && aux->hora==aux->next->hora && aux->min<aux->next->min))
+            {
+                return 1;
+            }
+        }
+        aux=aux->next;
+    }
+    return 0;
 }
 
-int check_pre(prereservas lista_pre){
-
+int check_pre(prereservas lista_pre, int menu){
+    prereservas aux=lista_pre->next;
+    while(aux->next!=NULL){
+        if(menu==1){
+            if((aux->ano<aux->next->ano)||
+                (aux->ano==aux->next->ano && aux->mes>aux->next->mes) ||
+                (aux->ano==aux->next->ano && aux->mes==aux->next->mes && aux->dia>aux->next->dia)){
+                return 1;
+            }
+        } else {
+            if((aux->ano>aux->next->ano)||
+                (aux->ano==aux->next->ano && aux->mes<aux->next->mes) ||
+                (aux->ano==aux->next->ano && aux->mes==aux->next->mes && aux->dia<aux->next->dia)){
+                return 1;
+            }
+        }
+        aux=aux->next;
+    }
+    return 0;
 }
 
-void sort(reservas lista_reservas, prereservas lista_pre, int menu){
+void sort(reservas lista_reservas, prereservas lista_pre, int menu, int freservas){
     reservas aux= lista_reservas;
     prereservas auxpr= lista_pre;
     reservas exchange;
@@ -147,6 +187,11 @@ void sort(reservas lista_reservas, prereservas lista_pre, int menu){
         }
         aux=aux->next;
     }
+    if(check_reservas(lista_reservas, menu)==1 && freservas==1){
+        sort(lista_reservas, lista_pre, menu, freservas);
+    } else {
+        freservas==0;
+    }
     //Ordenar pré-reservas
     while(auxpr->next->next!=NULL){
         if(menu==1){
@@ -173,5 +218,10 @@ void sort(reservas lista_reservas, prereservas lista_pre, int menu){
             }
         }           
         auxpr=auxpr->next;
+    }
+    if(check_pre(lista_pre, menu)==1){
+        sort(lista_reservas, lista_pre, menu, freservas);
+    } else {
+        return;
     }
 }

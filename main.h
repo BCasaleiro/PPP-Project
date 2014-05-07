@@ -13,5 +13,6 @@ void update_reservas(reservas lista);
 void update_prereservas(prereservas lista);
 int data_valida(int dia, int mes, int ano);
 void listar(reservas lista_reservas, prereservas lista_pre);
-
+void imprimir_reservas(reservas lista_reservas);
+void imprimir_pre(prereservas lista_pre);
 void clear_screen();
