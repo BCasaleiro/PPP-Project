@@ -81,11 +81,13 @@ void delete_reserva(rnode* anterior){
     free(aux);
 }
 
-prnode* find_ant_pre(prereservas lista_reservas, char nome[], char op){
-    prereservas aux= lista_reservas;
+prnode* find_ant_pre(prereservas lista_pre, char nome[], char op){
+    prereservas aux= lista_pre;
     while(aux->next!=NULL){
-        printf("%s e %s enter now\n", nome, aux->next->nome);
-        if(strcmp(nome, aux->next->nome)==0 && aux->op==op){
+        printf("iteração\n");
+        printf("primeira: %d e segunda: %d\n",strcmp(nome, aux->next->nome), aux->next->op== op );
+        if(strcmp(nome, aux->next->nome)==0 && aux->next->op==op){
+            printf("porque e que nao retornas?\n");
             return aux;
         }
         aux=aux->next;
@@ -95,7 +97,9 @@ prnode* find_ant_pre(prereservas lista_reservas, char nome[], char op){
 
 void delete_pre(prnode* anterior){
     prnode* aux;
+    printf("e mesmo aqui\n");
     aux=anterior->next;
+    printf("estranho\n");
     anterior->next= anterior->next->next;
     free(aux);
 }

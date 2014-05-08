@@ -67,7 +67,6 @@ void reserva(reservas lista_reservas, prereservas lista_pre){
             printf("Reserva de Lavagem:\n");
             op ='L';
             reservar(lista_reservas, lista_pre, op);
-            //update();
             break;
         case 2:
             clear_screen();
@@ -94,12 +93,12 @@ void cancela(reservas lista_reservas, prereservas lista_pre){
         case 1:
             clear_screen();
             op='L';
-            cancelar(lista_reservas, op);
+            cancelar(lista_reservas, lista_pre, op);
             break;
         case 2:
             clear_screen();
             op='M';
-            cancelar(lista_reservas, op);
+            cancelar(lista_reservas, lista_pre, op);
             break;
         default:
             clear_screen();
@@ -203,10 +202,12 @@ void reservar(reservas lista_reservas, prereservas lista_pre, char op){
     }
 }
 
-void cancelar(reservas lista_reservas, char op){
+void cancelar(reservas lista_reservas, prereservas lista_pre, char op){
     char nome[MAX];
     rnode* ant;
     int i;
+    int hora;
+    int min;
     if(op=='M'){
         printf("Cancelar reserva de manutenção em nome de: ");
     } else {
@@ -223,7 +224,10 @@ void cancelar(reservas lista_reservas, char op){
         printf("Reserva não encontrada! A regressar ao menu principal...\n");
         return;
     }
+    hora= ant->next->hora;
+    min=ant->next->min;
     delete_reserva(ant);
+    update_apos_cancelamento(lista_reservas, lista_pre, hora, min, op);
 
 }
 
@@ -372,17 +376,18 @@ void update_reservas(reservas lista) {
     if(reservas_lavagem+reservas_manutencao>1){
         sort_reservas(lista, 1);
     }
-    por_no_ficheiro_reservas(lista);
+    if(reservas_lavagem+reservas_manutencao>0){
+        por_no_ficheiro_reservas(lista);
+    }
 }
 
 void update_prereservas(prereservas lista) {
     int pre_lavagem=0;
     int pre_manutencao=0;
     count_pre(lista, &pre_lavagem, &pre_manutencao);
-    if(pre_lavagem+pre_manutencao>1){
-        sort_pre(lista, 1);
+    if(pre_lavagem+pre_manutencao>0){
+        por_no_ficheiro_prereserva(lista);
     }
-    por_no_ficheiro_prereserva(lista);
 }
 
 int data_valida(int dia, int mes, int ano) {
@@ -544,6 +549,43 @@ void count_pre(prereservas lista_pre, int* lav, int* man){
         }
         aux=aux->next;
     }
+}
+
+void update_apos_cancelamento(reservas lista_reservas, prereservas lista_pre, int hora, int min, char op){
+    prereservas go= lista_pre->next;
+    prnode* aux;
+    prnode* ant;
+    int pre_lavagem=0;
+    int pre_manutencao=0;
+    count_pre(lista_pre, &pre_lavagem, &pre_manutencao);
+    if(op=='L' && pre_lavagem>0){
+        while(go!=NULL){
+            if(go->op==op){
+                aux=go;
+            }
+            go=go->next;
+        }
+        insert_reserva(lista_reservas, op, aux->dia, aux->mes, aux->ano, hora, min, aux->nome);
+        printf("afinal e no find ant pre\n");
+        ant= find_ant_pre(lista_pre, aux->nome, op);
+        printf("nome: %s\n", ant->nome);
+        delete_pre(ant);
+        printf("delete_pre\n");
+        update_reservas(lista_reservas);
+        update_prereservas(lista_pre);
+    } else if(op='M' && pre_manutencao>0){
+        while(go!=NULL){
+            if(go->op==op){
+                aux=go;
+            }
+            go=go->next;
+        }
+        insert_reserva(lista_reservas, op, aux->dia, aux->mes, aux->ano, hora, min, aux->nome);
+        ant= find_ant_pre(lista_pre, aux->nome, op);
+        delete_pre(ant);
+        update_reservas(lista_reservas);
+        update_prereservas(lista_pre);
+    } 
 }
 
 void clear_screen(){
