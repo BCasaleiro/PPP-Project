@@ -84,10 +84,7 @@ void delete_reserva(rnode* anterior){
 prnode* find_ant_pre(prereservas lista_pre, char nome[], char op){
     prereservas aux= lista_pre;
     while(aux->next!=NULL){
-        printf("iteração\n");
-        printf("primeira: %d e segunda: %d\n",strcmp(nome, aux->next->nome), aux->next->op== op );
         if(strcmp(nome, aux->next->nome)==0 && aux->next->op==op){
-            printf("porque e que nao retornas?\n");
             return aux;
         }
         aux=aux->next;
