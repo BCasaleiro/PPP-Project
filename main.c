@@ -16,7 +16,7 @@ int main(){
 }
 
 void menu(reservas lista_reservas, prereservas lista_pre){
-    int menu;
+    int menu = 9;
     do{
         printf("Menu:\n1- Reservar lavagem ou manutenção\n2- Cancelar reserva de lavagem ou manutenção\n3- Cancelar pré-reserva de lavagem ou manutenção\n4- Listar reservas e pré-reservas\n0- Sair\nO que fazer? ");
         scanf("%d", &menu); 
@@ -47,13 +47,13 @@ void menu(reservas lista_reservas, prereservas lista_pre){
                 break;
             default:
                 clear_screen();
-                printf("%d não é uma opção válida!\n", menu);
+                printf("Não é uma opção válida!\n");
         }
     }while(menu != 0);
 }
 
 void reserva(reservas lista_reservas, prereservas lista_pre){
-    int menu;
+    int menu = 9;
     char op;
     printf("Reservar:\n1- Lavagem\n2- Manutenção\n0- Regressar ao menu principal\nO que reservar? ");
     scanf("%d", &menu);
@@ -76,12 +76,12 @@ void reserva(reservas lista_reservas, prereservas lista_pre){
             break;
         default:
             clear_screen();
-            printf("%d não é uma opção válida! A regressar ao menu principal...\n", menu);
+            printf("Não é uma opção válida! A regressar ao menu principal...\n");
     }   
 }
 
 void cancela(reservas lista_reservas, prereservas lista_pre){
-    int menu;
+    int menu = 9;
     char op;
     printf("Cancelar:\n1- Lavagem\n2- Manutenção\n0- Regressar ao menu principal\nO que cancelar? ");
     scanf("%d", &menu);
@@ -102,12 +102,12 @@ void cancela(reservas lista_reservas, prereservas lista_pre){
             break;
         default:
             clear_screen();
-            printf("%d não é uma opção válida! A regressar ao menu principal...\n", menu);
+            printf("Não é uma opção válida! A regressar ao menu principal...\n");
     }
 }
 
 void cancela_pre(prereservas lista_pre){
-    int menu;
+    int menu = 9;
     char op;
     printf("Cancelar:\n1- Lavagem\n2- Manutenção\n0- Regressar ao menu principal\nO que cancelar? ");
     scanf("%d", &menu);
@@ -128,13 +128,13 @@ void cancela_pre(prereservas lista_pre){
             break;
         default:
             clear_screen();
-            printf("%d não é uma opção válida! A regressar ao menu principal...\n", menu);
+            printf("Não é uma opção válida! A regressar ao menu principal...\n");
     }
 }
 
 void reservar(reservas lista_reservas, prereservas lista_pre, char op){
     int i;
-    int menu;
+    int menu = 9;
     int flag=1;
     int reservado;
     int pre_reservado;
