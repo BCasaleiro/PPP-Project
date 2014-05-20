@@ -16,7 +16,7 @@ int main(){
 }
 
 void menu(reservas lista_reservas, prereservas lista_pre){
-    int menu;
+    int menu=9;
     do{
         printf("Menu:\n1- Reservar lavagem ou manutenção\n2- Cancelar reserva de lavagem ou manutenção\n3- Cancelar pré-reserva de lavagem ou manutenção\n4- Listar reservas e pré-reservas\n0- Sair\nO que fazer? ");
         scanf("%d", &menu); 
@@ -33,8 +33,7 @@ void menu(reservas lista_reservas, prereservas lista_pre){
             case 2:
                 clear_screen();
                 cancela(lista_reservas, lista_pre);
-                update_reservas(lista_reservas); //temporario!!
-                //update de encaixe pre-reserva
+                update_reservas(lista_reservas);
                 break;
             case 3:
                 clear_screen();
@@ -255,85 +254,28 @@ void cancelar_pre(prereservas lista_pre, char op){
 }
 
 int verifica_vaga(reservas lista_reservas, char op, int dia, int mes, int ano){
-    reservas aux= lista_reservas->next;
-    int flag=1;
-    int reservas[20][2];
-    int i=0;
-    int k;
-    int phora_vaga;
-    int pmin_vaga;
-    //Mete todas as reservas para o dia
+    /*reservas aux= lista_reservas->next;
+    int phora;
+    int pmin;
+    int n_vagas;
     int reservas_lavagem=0;
     int reservas_manutencao=0;
     count_reservas(lista_reservas, &reservas_lavagem, &reservas_manutencao);
     if(reservas_lavagem+reservas_manutencao>1){
         sort_reservas(lista_reservas, 1);
     }
-    while(aux!=NULL){
-        if(op==aux->op && dia== aux->dia && mes== aux->mes && ano== aux->ano){
-            reservas[i][0]= aux->hora;
-            reservas[i][1]= aux->min;
-            printf("Reserva para as %02d:%02d\n", reservas[i][0], reservas[i][1]);
-            i++;
+    while(aux->next!=NULL){
+        if(op=='L'){
+            phora= aux->next->hora - aux->hora;
+            pmin= abs(aux->next->hora - aux->min);
+            if((aux->min+30>60 && phora=1 && pmin>=aux->min-30) || (phora>=0 && pmin))
+
+        } else if(op=='M'){
+            if()
         }
         aux=aux->next;
     }
-    if(i>1){
-        for(k=0;k<i-1;k++){
-            phora_vaga= reservas[k+1][0]- reservas[k][0];
-            pmin_vaga= reservas[k+1][1]- reservas[k][1];
-            if(op=='M' && (phora_vaga>1 || (phora_vaga==1 && pmin_vaga>=0))){
-                printf("Manutenção disponivel entre as %02d:%02d e as %02d:%02d\n", reservas[k][0]+1, reservas[k][1], reservas[k+1][0],reservas[k+1][1]);
-                flag=0;
-            } else if(op=='L' &&( phora_vaga>1 || ( phora_vaga==1 && abs(pmin_vaga)>=30 ) ||  (phora_vaga==0 && pmin_vaga>=30))){
-                if(reservas[k][1]+30<60){
-                    printf("Lavagem disponivel entre as %02d:%02d e as %02d:%02d\n", reservas[k][0], reservas[k][1]+30, reservas[k+1][0],reservas[k+1][1]);
-                } else if(reservas[k][1]+30>60){
-                    printf("Lavagem disponivel entre as %02d:%02d e as %02d:%02d\n", reservas[k][0]+1, reservas[k][1]-30, reservas[k+1][0],reservas[k+1][1]);
-                } else {
-                    printf("Lavagem disponivel entre as %02d:%02d e as %02d:%02d\n", reservas[k][0]+1, 0, reservas[k+1][0],reservas[k+1][1]);
-                }
-                flag=0;
-            }
-        }
-    } else if(i==1){
-        if(op=='M' && (reservas[0][0]-8>=1)){
-            printf("Manutenção disponivel entre as %02d:%02d e as %02d:%02d\n", 8,0, reservas[0][0], reservas[0][1]);
-            printf("Manutenção disponivel entre as %02d:%02d e as %02d:%02d\n",reservas[0][0]+1, reservas[0][1], 18, 0 );
-            flag=0;
-        }else if(op=='M' && reservas[0][0]==8){
-            printf("Manutenção disponivel entre as %02d:%02d e as %02d:%02d\n",reservas[0][0]+1, reservas[0][1], 18, 0 );
-            flag=0;
-        } else if(op=='L' && (reservas[0][0]-8>=1 || (reservas[0][0]-8==0 && reservas[0][1]>=30) )){
-            printf("Lavagem disponivel entre as %02d:%02d e as %02d:%02d\n", 8,0, reservas[0][0], reservas[0][1]);
-            flag=0;
-            if(reservas[0][1]+30<60){
-                printf("Lavagem disponivel entre as %02d:%02d e as %02d:%02d\n", reservas[0][0], reservas[0][1]+30, 18,0);
-                flag=0;
-            } else if(reservas[0][1]+30>60){
-                printf("Lavagem disponivel entre as %02d:%02d e as %02d:%02d\n", reservas[0][0]+1, reservas[0][1]-30, 18, 0);
-                flag=0;
-            } else {
-                printf("Lavagem disponivel entre as %02d:%02d e as %02d:%02d\n", reservas[0][0]+1, 0, 18,0);
-                flag=0;
-            }
-        } else if(op=='L' && reservas[0][0]==8){
-            if(reservas[0][1]+30<60){
-                printf("Lavagem disponivel entre as %02d:%02d e as %02d:%02d\n", reservas[0][0], reservas[0][1]+30, 18,0);
-                flag=0;
-            } else if(reservas[0][1]+30>60){
-                printf("Lavagem disponivel entre as %02d:%02d e as %02d:%02d\n", reservas[0][0]+1, reservas[0][1]-30, 18, 0);
-                flag=0;
-            } else {
-                printf("Lavagem disponivel entre as %02d:%02d e as %02d:%02d\n", reservas[0][0]+1, 0, 18,0);
-                flag=0;
-            }
-        }
-    } else {
-        printf("Reserva disponivel entre as %02d:%02d e as %02d:%02d\n", 8, 0, 18, 0);
-        flag=0;
-    }
-    return flag;
+*/
 }
 
 int disponibilidade(reservas lista_reservas, char op, int hora,int min){
@@ -349,6 +291,9 @@ int disponibilidade(reservas lista_reservas, char op, int hora,int min){
                 return 1;
             }
         } else if(op=='L' && aux->op== op){
+            if(hora==17  && min>30){
+                return 1;
+            }
             if(min+30>60){
                 if((hora==aux->hora && min>=aux->min && min<=aux->min+30) || (hora+1==aux->hora &&  min-30>=aux->min && min-30<=aux->min+30) || (aux->min+30>60 && hora==aux->hora && min>=aux->min && min-30 <=aux->min-30)){
                     return 1;
@@ -361,8 +306,6 @@ int disponibilidade(reservas lista_reservas, char op, int hora,int min){
                 if((hora==aux->hora && min+30>=aux->min && min+30<=aux->min+30) || (hora==aux->hora && min>=aux->min && min<=aux->min+30) || (aux->min+30>60 && hora==aux->hora+1 && min<=aux->min-30)){
                     return 1;
                 }
-            } else if(hora==17 && min>30){
-                return 1;
             }
         }
         aux=aux->next;
