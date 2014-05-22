@@ -7,8 +7,6 @@
 
 
 void print_informacao(reservas lista_reservas, prereservas lista_pre) {
-
-
 	int contador = 0, linhas = 0;
 	char c;
 	char input[MAX];
@@ -20,14 +18,14 @@ void print_informacao(reservas lista_reservas, prereservas lista_pre) {
 	f = fopen("prereservas.txt", "r");
 
 	if (fp != NULL) {
-		while (fgets(input, 50, fp) != NULL) {
+		while (fgets(input, MAX-1, fp) != NULL) {
 			extrair_informacao_reservas(lista_reservas, input);
 		}
 		fclose(fp);
 	}
 
 	if (f != NULL) {
-		while (fgets(input, 50, f) != NULL) {
+		while (fgets(input, MAX-1, f) != NULL) {
 			extrair_informacao_prereservas(lista_pre, input);
 		}	
 		fclose(f);

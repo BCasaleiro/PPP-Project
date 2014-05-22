@@ -40,8 +40,6 @@ int insert_reserva(reservas r, char op, int dia, int mes, int ano, int hora, int
         r->next=ins;
         return 0;
     }
-    //update
-    //por_no_ficheiro(r);
     printf("ERROR: returning 1!\n");
     return 1;
 }
@@ -105,21 +103,11 @@ int check_reservas(reservas lista_reservas, int menu){
     reservas aux=lista_reservas->next;
     while(aux->next!=NULL){
         if(menu==1){
-            if((aux->ano<aux->next->ano)||
-                (aux->ano==aux->next->ano && aux->mes>aux->next->mes) ||
-                (aux->ano==aux->next->ano && aux->mes==aux->next->mes && aux->dia>aux->next->dia) ||
-                (aux->ano==aux->next->ano && aux->mes==aux->next->mes && aux->dia==aux->next->dia && aux->hora>aux->next->hora) ||
-                (aux->ano==aux->next->ano && aux->mes==aux->next->mes && aux->dia==aux->next->dia && aux->hora==aux->next->hora && aux->min>aux->next->min))
-            {
+            if(troca_reservas(menu, aux)==1){
                 return 1;
             }
         } else {
-            if((aux->ano>aux->next->ano)||
-                (aux->ano==aux->next->ano && aux->mes<aux->next->mes) ||
-                (aux->ano==aux->next->ano && aux->mes==aux->next->mes && aux->dia<aux->next->dia) ||
-                (aux->ano==aux->next->ano && aux->mes==aux->next->mes && aux->dia==aux->next->dia && aux->hora<aux->next->hora) ||
-                (aux->ano==aux->next->ano && aux->mes==aux->next->mes && aux->dia==aux->next->dia && aux->hora==aux->next->hora && aux->min<aux->next->min))
-            {
+            if(troca_reservas(menu, aux)==1){
                 return 1;
             }
         }
@@ -132,15 +120,11 @@ int check_pre(prereservas lista_pre, int menu){
     prereservas aux=lista_pre->next;
     while(aux->next!=NULL){
         if(menu==1){
-            if((aux->ano<aux->next->ano)||
-                (aux->ano==aux->next->ano && aux->mes>aux->next->mes) ||
-                (aux->ano==aux->next->ano && aux->mes==aux->next->mes && aux->dia>aux->next->dia)){
+            if(troca_pre(menu, aux)==1){
                 return 1;
             }
         } else {
-            if((aux->ano>aux->next->ano)||
-                (aux->ano==aux->next->ano && aux->mes<aux->next->mes) ||
-                (aux->ano==aux->next->ano && aux->mes==aux->next->mes && aux->dia<aux->next->dia)){
+            if(troca_pre(menu, aux)==1){
                 return 1;
             }
         }
@@ -153,15 +137,9 @@ void sort_reservas(reservas lista_reservas, int menu){
     reservas aux= lista_reservas;
     reservas exchange;
     reservas exchange2;
-    //Ordenar reservas
     while(aux->next->next!=NULL){
         if(menu==1){
-            if(((aux->next)->ano< (aux->next->next)->ano) || 
-                ((aux->next)->ano == (aux->next->next)->ano && (aux->next)->mes> (aux->next->next)->mes) ||
-                ((aux->next)->ano == (aux->next->next)->ano && (aux->next)->mes== (aux->next->next)->mes && (aux->next)->dia> (aux->next->next)->dia)||
-                ((aux->next)->ano == (aux->next->next)->ano && (aux->next)->mes== (aux->next->next)->mes && (aux->next)->dia== (aux->next->next)->dia && (aux->next)->hora> (aux->next->next)->hora)||
-                ((aux->next)->ano == (aux->next->next)->ano && (aux->next)->mes== (aux->next->next)->mes && (aux->next)->dia== (aux->next->next)->dia && (aux->next)->hora== (aux->next->next)->hora && (aux->next)->min> (aux->next->next)->min)){
-
+            if(troca_reservas(menu, aux->next)==1){
                 exchange=aux->next->next->next;
                 exchange2=aux->next;
                 aux->next= aux->next->next;
@@ -169,12 +147,7 @@ void sort_reservas(reservas lista_reservas, int menu){
                 (aux->next->next)->next=exchange;
             }
         } else {
-            if(((aux->next)->ano> (aux->next->next)->ano) || 
-                ((aux->next)->ano == (aux->next->next)->ano && (aux->next)->mes< (aux->next->next)->mes) ||
-                ((aux->next)->ano == (aux->next->next)->ano && (aux->next)->mes== (aux->next->next)->mes && (aux->next)->dia< (aux->next->next)->dia)||
-                ((aux->next)->ano == (aux->next->next)->ano && (aux->next)->mes== (aux->next->next)->mes && (aux->next)->dia== (aux->next->next)->dia && (aux->next)->hora< (aux->next->next)->hora)||
-                ((aux->next)->ano == (aux->next->next)->ano && (aux->next)->mes== (aux->next->next)->mes && (aux->next)->dia== (aux->next->next)->dia && (aux->next)->hora== (aux->next->next)->hora && (aux->next)->min< (aux->next->next)->min)){
-
+            if(troca_reservas(menu, aux->next)==1){
                 exchange=aux->next->next->next;
                 exchange2=aux->next;
                 aux->next= aux->next->next;
@@ -189,20 +162,15 @@ void sort_reservas(reservas lista_reservas, int menu){
     } else {
         return;
     }
-
 }
 
 void sort_pre(prereservas lista_pre, int menu){
     prereservas auxpr= lista_pre;
     prereservas exchangepr;
     prereservas exchangepr2;
-    //Ordenar pré-reservas
     while(auxpr->next->next!=NULL){
         if(menu==1){
-            if(((auxpr->next)->ano< (auxpr->next->next)->ano) || 
-                ((auxpr->next)->ano == (auxpr->next->next)->ano && (auxpr->next)->mes> (auxpr->next->next)->mes) ||
-                ((auxpr->next)->ano == (auxpr->next->next)->ano && (auxpr->next)->mes== (auxpr->next->next)->mes && (auxpr->next)->dia> (auxpr->next->next)->dia))
-            {
+            if(troca_pre(menu, auxpr->next)==1){
                 exchangepr=auxpr->next->next->next;
                 exchangepr2=auxpr->next;
                 auxpr->next= auxpr->next->next;
@@ -210,10 +178,7 @@ void sort_pre(prereservas lista_pre, int menu){
                 (auxpr->next->next)->next=exchangepr;
             }
         } else {
-            if(((auxpr->next)->ano> (auxpr->next->next)->ano) || 
-                ((auxpr->next)->ano == (auxpr->next->next)->ano && (auxpr->next)->mes< (auxpr->next->next)->mes) ||
-                ((auxpr->next)->ano == (auxpr->next->next)->ano && (auxpr->next)->mes== (auxpr->next->next)->mes && (auxpr->next)->dia< (auxpr->next->next)->dia))
-            {
+            if(troca_pre(menu, auxpr->next)==1){
                 exchangepr=auxpr->next->next->next;
                 exchangepr2=auxpr->next;
                 auxpr->next= auxpr->next->next;
@@ -228,4 +193,54 @@ void sort_pre(prereservas lista_pre, int menu){
     } else {
         return;
     }
+}
+
+int troca_reservas(int menu, reservas aux){
+    if(menu==1){
+        if(aux->ano<aux->next->ano){
+            return 1;
+        } else if(aux->ano==aux->next->ano && aux->mes>aux->next->mes) {
+            return 1;
+        } else if(aux->ano==aux->next->ano && aux->mes==aux->next->mes && aux->dia>aux->next->dia){
+            return 1;
+        } else if(aux->ano==aux->next->ano && aux->mes==aux->next->mes && aux->dia==aux->next->dia && aux->hora>aux->next->hora) {
+            return 1;
+        } else if(aux->ano==aux->next->ano && aux->mes==aux->next->mes && aux->dia==aux->next->dia && aux->hora==aux->next->hora && aux->min>aux->next->min){
+            return 1;
+        }
+    } else {
+        if(aux->ano>aux->next->ano){
+            return 1;
+        } else if(aux->ano==aux->next->ano && aux->mes<aux->next->mes){
+            return 1;
+        } else if(aux->ano==aux->next->ano && aux->mes==aux->next->mes && aux->dia<aux->next->dia){
+            return 1;
+        } else if(aux->ano==aux->next->ano && aux->mes==aux->next->mes && aux->dia==aux->next->dia && aux->hora<aux->next->hora){
+            return 1;
+        } else if(aux->ano==aux->next->ano && aux->mes==aux->next->mes && aux->dia==aux->next->dia && aux->hora==aux->next->hora && aux->min<aux->next->min){
+            return 1;
+        }
+    }
+    return 0;
+}
+
+int troca_pre(int menu, prereservas aux){
+    if(menu==1){
+        if(aux->ano<aux->next->ano){
+            return 1;
+        } else if(aux->ano==aux->next->ano && aux->mes>aux->next->mes){
+            return 1;
+        } else if(aux->ano==aux->next->ano && aux->mes==aux->next->mes && aux->dia>aux->next->dia){
+            return 1;
+        }
+    } else {
+        if(aux->ano>aux->next->ano){
+            return 1;
+        } else if(aux->ano==aux->next->ano && aux->mes<aux->next->mes) {
+            return 1;
+        } else if(aux->ano==aux->next->ano && aux->mes==aux->next->mes && aux->dia<aux->next->dia){
+            return 1;
+        }
+    }
+    return 0;
 }
