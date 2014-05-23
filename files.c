@@ -4,8 +4,6 @@
 #include "data.h"
 #include "files.h"
 
-
-
 void print_informacao(reservas lista_reservas, prereservas lista_pre) {
 	int contador = 0, linhas = 0;
 	char c;
@@ -29,12 +27,10 @@ void print_informacao(reservas lista_reservas, prereservas lista_pre) {
 			extrair_informacao_prereservas(lista_pre, input);
 		}	
 		fclose(f);
-	}
-	
+	}	
 }
 
 void extrair_informacao_reservas(reservas lista_reservas, char input[]) {
-
 	int i;
 	int dia, mes, ano, hora, min;
 	int counter = 0;
@@ -62,7 +58,6 @@ void extrair_informacao_reservas(reservas lista_reservas, char input[]) {
 }
 
 void extrair_informacao_prereservas(prereservas lista_pre, char input[]) {
-
 	int i;
 	int dia, mes, ano, hora, min;
 	int counter = 0;
@@ -88,7 +83,6 @@ void extrair_informacao_prereservas(prereservas lista_pre, char input[]) {
 
 
 void por_no_ficheiro_reservas(reservas lista) {
-
 	FILE *fp;
 	reservas aux = lista->next;
 
@@ -98,11 +92,9 @@ void por_no_ficheiro_reservas(reservas lista) {
 		aux=aux->next;
 	}
 	fclose(fp);
-
 }
 
 void por_no_ficheiro_prereserva(prereservas lista) {
-
 	FILE *fp;
 	prereservas aux = lista->next;
 
@@ -112,6 +104,5 @@ void por_no_ficheiro_prereserva(prereservas lista) {
 		aux = aux -> next;
 	}
 	fclose(fp);
-
 }
 

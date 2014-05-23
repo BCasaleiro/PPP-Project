@@ -9,8 +9,9 @@ void cancelar(reservas lista_reservas, prereservas lista_pre, char op);
 void cancelar_pre(prereservas lista_pre, char op);
 int verifica_vaga(reservas lista_reservas, char op, int dia, int mes, int ano);
 int vagas(reservas lista_reservas, int n, int dia, int mes, int ano);
-int disponibilidade(reservas lista_reservas,char op, int hora,int min);
-void get_time(int *hora, int *min)
+int disponibilidade(reservas lista_reservas, char op, int hora,int min, int dia, int mes, int ano);
+int hora_valida(int dia, int mes, int ano, int hora, int min);
+void get_time(int *hora, int *min);
 void update_reservas(reservas lista);
 void update_prereservas(prereservas lista);
 int data_valida(int dia, int mes, int ano);

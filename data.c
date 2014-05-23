@@ -92,9 +92,7 @@ prnode* find_ant_pre(prereservas lista_pre, char nome[], char op){
 
 void delete_pre(prnode* anterior){
     prnode* aux;
-    printf("e mesmo aqui\n");
     aux=anterior->next;
-    printf("estranho\n");
     anterior->next= anterior->next->next;
     free(aux);
 }
