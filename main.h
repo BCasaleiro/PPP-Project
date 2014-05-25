@@ -1,4 +1,5 @@
 #define MAX 101
+#define MAX_DATA 10
 
 void menu(reservas lista_reservas, prereservas lista_pre);
 void reserva(reservas lista_reservas, prereservas lista_pre);
@@ -20,7 +21,6 @@ void get_date(int * dia, int * mes, int * ano);
 void listar(reservas lista_reservas, prereservas lista_pre);
 void imprimir_reservas(reservas lista_reservas, char op);
 void imprimir_pre(prereservas lista_pre, char op);
-void count_reservas(reservas lista_reservas, int* lav, int* man);
-void count_pre(prereservas lista_pre, int* lav, int* man);
 void update_apos_cancelamento(reservas lista_reservas, prereservas lista_pre, int hora, int min, char op);
+void clear_buffer();
 void clear_screen();

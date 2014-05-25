@@ -273,11 +273,15 @@ void reservar(reservas lista_reservas, prereservas lista_pre, char op){
     }
     do {
         printf("Data (DD-MM-AAAA): ");
-        scanf("%d-%d-%d", &dia, &mes, &ano);
-        if (data_valida(dia, mes, ano) == 0) {
-            printf("Data incorrecta!\n");
+        if (scanf("%d-%d-%d", &dia, &mes, &ano)!=3){
+            printf("A data introduzida não está no formato DD-MM-AAAA\n");
+            clear_buffer();
         } else {
-            flag=0;
+            if (data_valida(dia, mes, ano) == 0) {
+                printf("Data incorrecta!\n");
+            } else {
+                flag=0;
+            }
         }
     }while (flag == 1);
     flag=1;
@@ -308,11 +312,15 @@ void reservar(reservas lista_reservas, prereservas lista_pre, char op){
     //Indica as horas disponiveis para esse dia
     do{
         printf("Hora (hh:mm): ");
-        scanf("%02d:%02d", &hora, &min);
-        if(disponibilidade(lista_reservas, op, hora, min, dia, mes, ano)==0){
-            flag=0;
+        if(scanf("%d:%d", &hora, &min)!=2){
+            printf("A hora introduzida não está no formato hh:mm\n");
+            clear_buffer();
         } else {
-            printf("%02d:%02d não é uma hora válida para reserva\n", hora, min);
+            if(disponibilidade(lista_reservas, op, hora, min, dia, mes, ano)==0){
+                flag=0;
+            } else {
+                printf("%02d:%02d não é uma hora válida para reserva\n", hora, min);
+            }
         }
     }while(flag==1);
     reservado = insert_reserva(lista_reservas, op, dia, mes, ano, hora, min, nome);
@@ -624,30 +632,6 @@ void imprimir_pre(prereservas lista_pre, char op){
     }
 }
 
-void count_reservas(reservas lista_reservas, int* lav, int* man){
-    reservas aux= lista_reservas->next;
-    while(aux!=NULL){
-        if(aux->op=='M'){
-            (*man)++;
-        } else if(aux->op=='L'){
-            (*lav)++;
-        }
-        aux=aux->next;
-    }
-}
-
-void count_pre(prereservas lista_pre, int* lav, int* man){
-    prereservas aux= lista_pre->next;
-    while(aux!=NULL){
-        if(aux->op=='M'){
-            (*man)++;
-        } else if(aux->op=='L'){
-            (*lav)++;
-        }
-        aux=aux->next;
-    }
-}
-
 void update_apos_cancelamento(reservas lista_reservas, prereservas lista_pre, int hora, int min, char op){
     prereservas go= lista_pre->next;
     prnode* aux;
@@ -680,6 +664,10 @@ void update_apos_cancelamento(reservas lista_reservas, prereservas lista_pre, in
         update_reservas(lista_reservas);
         update_prereservas(lista_pre);
     } 
+}
+
+void clear_buffer(){
+    while(getchar()!='\n');
 }
 
 void clear_screen(){

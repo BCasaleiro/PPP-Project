@@ -242,3 +242,27 @@ int troca_pre(int menu, prereservas aux){
     }
     return 0;
 }
+
+void count_reservas(reservas lista_reservas, int* lav, int* man){
+    reservas aux= lista_reservas->next;
+    while(aux!=NULL){
+        if(aux->op=='M'){
+            (*man)++;
+        } else if(aux->op=='L'){
+            (*lav)++;
+        }
+        aux=aux->next;
+    }
+}
+
+void count_pre(prereservas lista_pre, int* lav, int* man){
+    prereservas aux= lista_pre->next;
+    while(aux!=NULL){
+        if(aux->op=='M'){
+            (*man)++;
+        } else if(aux->op=='L'){
+            (*lav)++;
+        }
+        aux=aux->next;
+    }
+}
