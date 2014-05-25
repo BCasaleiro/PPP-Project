@@ -270,7 +270,6 @@ void reservar(reservas lista_reservas, prereservas lista_pre, char op){
     int min;
     printf("Nome: ");
     fgets(nome, MAX-1, stdin);
-    clear_buffer();
     for (i = 0; nome[i] != 0; ++i) {
         if (nome[i] == '\n') {
             nome[i] = '\0';
@@ -352,7 +351,6 @@ void cancelar(reservas lista_reservas, prereservas lista_pre, char op){
         printf("Cancelar reserva de lavagem em nome de: ");
     }
     fgets(nome, MAX-1, stdin);
-    clear_buffer();
     for (i= 0; nome[i]!= 0; ++i) {
         if (nome[i] == '\n') {
             nome[i] = '\0';
