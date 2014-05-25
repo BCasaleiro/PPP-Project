@@ -377,7 +377,6 @@ void cancelar_pre(prereservas lista_pre, char op){
         printf("Cancelar pré-reserva de lavagem em nome de: ");
     }
     fgets(nome, MAX-1, stdin);
-    clear_buffer();
     for (i= 0; nome[i]!= 0; ++i) {
         if (nome[i] == '\n') {
             nome[i] = '\0';
