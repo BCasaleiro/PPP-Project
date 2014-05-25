@@ -5,14 +5,13 @@
 
 int verifica_vaga(reservas lista_reservas, char op, int dia, int mes, int ano){
     int lreservas[MAX_RESERVAS][2];
-    int vagas[MAX_RESERVAS][2];
+    int vagas[MAX_RESERVAS][2][2];
     int n_reservas;
     int n_vagas;
     n_reservas= agrupar_reservas(lista_reservas, lreservas, op, dia, mes, ano);
-    printf("Numero de reservas para %d/%d/%d: %d\n",dia, mes, ano, n_reservas);
     if(n_reservas>0){
         n_vagas=agrupar_vagas(lreservas, vagas, n_reservas, op);
-        printf("Numero de vagas para %d/%d/%d: %d\n", dia, mes, ano, n_vagas);
+        mostra_vagas(vagas, n_vagas);
     } else {
         return 0;
     }
@@ -41,7 +40,7 @@ int agrupar_reservas(reservas lista_reservas,int lreservas[MAX_RESERVAS][2] ,cha
     return count;
 }
 
-int agrupar_vagas(int lreservas[MAX_RESERVAS][2], int vagas[MAX_RESERVAS][2], int n_reservas,char op){
+int agrupar_vagas(int lreservas[MAX_RESERVAS][2], int vagas[MAX_RESERVAS][2][2], int n_reservas,char op){
     int i;
     int k=0;
     int dif_hora;
@@ -50,8 +49,10 @@ int agrupar_vagas(int lreservas[MAX_RESERVAS][2], int vagas[MAX_RESERVAS][2], in
         //Primeira vaga do dia
         dif_hora=lreservas[0][0]-8;
         if(dif_hora>=1){
-            vagas[k][0]=8;
-            vagas[k][1]=0;
+            vagas[k][0][0]=8;
+            vagas[k][0][1]=0;
+            vagas[k][1][0]=lreservas[0][0];
+            vagas[k][1][1]=lreservas[0][1];
             k++;
         }
         //Vagas
@@ -59,12 +60,16 @@ int agrupar_vagas(int lreservas[MAX_RESERVAS][2], int vagas[MAX_RESERVAS][2], in
             dif_hora=lreservas[i+1][0]-(lreservas[i][0]+1);
             dif_min=lreservas[i+1][1]-lreservas[i][1];
             if(dif_hora==1 && dif_min>=0){
-                vagas[k][0]=lreservas[i][0]+1;
-                vagas[k][1]=lreservas[i][1];
+                vagas[k][0][0]=lreservas[i][0]+1;
+                vagas[k][0][1]=lreservas[i][1];
+                vagas[k][1][0]=lreservas[i+1][0];
+                vagas[k][1][1]=lreservas[i+1][1];
                 k++;
             } else if(dif_hora>1){
-                vagas[k][0]=lreservas[i][0]+1;
-                vagas[k][1]=lreservas[i][1];
+                vagas[k][0][0]=lreservas[i][0]+1;
+                vagas[k][0][1]=lreservas[i][1];
+                vagas[k][1][0]=lreservas[i+1][0];
+                vagas[k][1][1]=lreservas[i+1][1];
                 k++;
             }
         }
@@ -72,12 +77,16 @@ int agrupar_vagas(int lreservas[MAX_RESERVAS][2], int vagas[MAX_RESERVAS][2], in
         dif_hora= 17-(lreservas[n_reservas-1][0]+1);
         dif_min=lreservas[n_reservas-1][1];
         if(dif_hora>=1){
-            vagas[k][0]=lreservas[n_reservas-1][0]+1;
-            vagas[k][1]=lreservas[n_reservas-1][1];
+            vagas[k][0][0]=lreservas[n_reservas-1][0]+1;
+            vagas[k][0][1]=lreservas[n_reservas-1][1];
+            vagas[k][1][0]=17;
+            vagas[k][1][1]=0;
             k++;
         } else if(dif_hora==0 && dif_min==0){
-            vagas[k][0]=lreservas[n_reservas-1][0]+1;
-            vagas[k][1]=lreservas[n_reservas-1][1];
+            vagas[k][0][0]=lreservas[n_reservas-1][0]+1;
+            vagas[k][0][1]=lreservas[n_reservas-1][1];
+            vagas[k][1][0]=17;
+            vagas[k][1][1]=0;
             k++;
         }
     } else if(op=='L'){
@@ -85,12 +94,16 @@ int agrupar_vagas(int lreservas[MAX_RESERVAS][2], int vagas[MAX_RESERVAS][2], in
         dif_hora=lreservas[0][0]-8;
         dif_min=lreservas[0][1];
         if(dif_hora>=1){
-            vagas[k][0]=8;
-            vagas[k][1]=0;
+            vagas[k][0][0]=8;
+            vagas[k][0][1]=0;
+            vagas[k][1][0]=lreservas[0][0];
+            vagas[k][1][1]=lreservas[0][1];
             k++;
         } else if(dif_hora==0 && dif_min>=30){
-            vagas[k][0]=8;
-            vagas[k][1]=0;
+            vagas[k][0][0]=8;
+            vagas[k][0][1]=0;
+            vagas[k][1][0]=lreservas[0][0];
+            vagas[k][1][1]=lreservas[0][1];
             k++;
         }
         //Vagas
@@ -99,12 +112,16 @@ int agrupar_vagas(int lreservas[MAX_RESERVAS][2], int vagas[MAX_RESERVAS][2], in
                 dif_hora=lreservas[i+1][0]-(lreservas[i][0]+1);
                 dif_min=lreservas[i+1][1]-(lreservas[i][1]-30);
                 if(dif_hora>=1){
-                    vagas[k][0]=lreservas[i][0]+1;
-                    vagas[k][1]=lreservas[i][1]-30;
+                    vagas[k][0][0]=lreservas[i][0]+1;
+                    vagas[k][0][1]=lreservas[i][1]-30;
+                    vagas[k][1][0]=lreservas[i+1][0];
+                    vagas[k][1][1]=lreservas[i+1][1];
                     k++;
                 } else if(dif_hora==0 && dif_min>=30){
-                    vagas[k][0]=lreservas[i][0]+1;
-                    vagas[k][1]=lreservas[i][1]-30;
+                    vagas[k][0][0]=lreservas[i][0]+1;
+                    vagas[k][0][1]=lreservas[i][1]-30;
+                    vagas[k][1][0]=lreservas[i+1][0];
+                    vagas[k][1][1]=lreservas[i+1][1];
                     k++;
                 }
                 
@@ -112,16 +129,22 @@ int agrupar_vagas(int lreservas[MAX_RESERVAS][2], int vagas[MAX_RESERVAS][2], in
                 dif_hora=lreservas[i+1][0]- lreservas[i][0];
                 dif_min=lreservas[i+1][1] - (lreservas[i][1]+30);
                 if(dif_hora>1){
-                    vagas[k][0]=lreservas[i][0];
-                    vagas[k][1]=lreservas[i][1]+30;
+                    vagas[k][0][0]=lreservas[i][0];
+                    vagas[k][0][1]=lreservas[i][1]+30;
+                    vagas[k][1][0]=lreservas[i+1][0];
+                    vagas[k][1][1]=lreservas[i+1][1];
                     k++;
                 } else if(dif_hora==0 && dif_min>=30){
-                    vagas[k][0]=lreservas[i][0];
-                    vagas[k][1]=lreservas[i][1]+30;
+                    vagas[k][0][0]=lreservas[i][0];
+                    vagas[k][0][1]=lreservas[i][1]+30;
+                    vagas[k][1][0]=lreservas[i+1][0];
+                    vagas[k][1][1]=lreservas[i+1][1];
                     k++;
                 } else if(dif_hora==1 && dif_min>=-30){
-                    vagas[k][0]=lreservas[i][0];
-                    vagas[k][1]=lreservas[i][1]+30;
+                    vagas[k][0][0]=lreservas[i][0];
+                    vagas[k][0][1]=lreservas[i][1]+30;
+                    vagas[k][1][0]=lreservas[i+1][0];
+                    vagas[k][1][1]=lreservas[i+1][1];
                     k++;
                 }
             }
@@ -131,28 +154,38 @@ int agrupar_vagas(int lreservas[MAX_RESERVAS][2], int vagas[MAX_RESERVAS][2], in
             dif_hora=17-(lreservas[n_reservas-1][0]+1);
             dif_min=30-(lreservas[n_reservas-1][1]-30);
             if(dif_hora>=1){
-                vagas[k][0]=lreservas[n_reservas-1][0]+1;
-                vagas[k][1]=lreservas[n_reservas-1][1]-30;
+                vagas[k][0][0]=lreservas[n_reservas-1][0]+1;
+                vagas[k][0][1]=lreservas[n_reservas-1][1]-30;
+                vagas[k][1][0]=17;
+                vagas[k][1][1]=30;
                 k++;
             } else if(dif_hora==0 && dif_min>=30){
-                vagas[k][0]=lreservas[n_reservas-1][0]+1;
-                vagas[k][1]=lreservas[n_reservas-1][1]-30;
+                vagas[k][0][0]=lreservas[n_reservas-1][0]+1;
+                vagas[k][0][1]=lreservas[n_reservas-1][1]-30;
+                vagas[k][1][0]=17;
+                vagas[k][1][1]=30;
                 k++;
             }
         } else {
             dif_hora=17-lreservas[n_reservas-1][0];
             dif_min=30-(lreservas[n_reservas-1][1]+30);
             if(dif_hora>1){
-                vagas[k][0]=lreservas[n_reservas-1][0];
-                vagas[k][1]=lreservas[n_reservas-1][1]+30;
+                vagas[k][0][0]=lreservas[n_reservas-1][0];
+                vagas[k][0][1]=lreservas[n_reservas-1][1]+30;
+                vagas[k][1][0]=17;
+                vagas[k][1][1]=30;
                 k++;
             } else if(dif_hora==0 && dif_min>=30){
-                vagas[k][0]=lreservas[n_reservas-1][0];
-                vagas[k][1]=lreservas[n_reservas-1][1]+30;
+                vagas[k][0][0]=lreservas[n_reservas-1][0];
+                vagas[k][0][1]=lreservas[n_reservas-1][1]+30;
+                vagas[k][1][0]=17;
+                vagas[k][1][1]=30;
                 k++;
             } else if(dif_hora==1 && dif_min>=-30){
-                vagas[k][0]=lreservas[i][0];
-                vagas[k][1]=lreservas[i][1]+30;
+                vagas[k][0][0]=lreservas[i][0];
+                vagas[k][0][1]=lreservas[i][1]+30;
+                vagas[k][1][0]=17;
+                vagas[k][1][1]=30;
                 k++;
             }
         }
@@ -160,9 +193,9 @@ int agrupar_vagas(int lreservas[MAX_RESERVAS][2], int vagas[MAX_RESERVAS][2], in
     return k;
 }
 
-int mostra_vagas(int vagas[MAX_RESERVAS][2], int n_vagas){
+int mostra_vagas(int vagas[MAX_RESERVAS][2][2], int n_vagas){
     int i;
     for(i=0;i<n_vagas;i++){
-        //mostrar vagas
+        printf("Reserva disponivel entre as %02d:%02d e as %02d:%02d\n", vagas[i][0][0], vagas[i][0][1], vagas[i][1][0], vagas[i][1][1]);
     }
 }
