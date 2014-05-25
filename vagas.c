@@ -11,7 +11,7 @@ int verifica_vaga(reservas lista_reservas, char op, int dia, int mes, int ano){
     n_reservas= agrupar_reservas(lista_reservas, lreservas, op, dia, mes, ano);
     if(n_reservas>0){
         n_vagas=agrupar_vagas(lreservas, vagas, n_reservas, op);
-        mostra_vagas(vagas, n_vagas);
+        mostra_vagas(vagas, n_vagas, op);
     } else {
         return 0;
     }
@@ -193,9 +193,53 @@ int agrupar_vagas(int lreservas[MAX_RESERVAS][2], int vagas[MAX_RESERVAS][2][2],
     return k;
 }
 
-int mostra_vagas(int vagas[MAX_RESERVAS][2][2], int n_vagas){
+int mostra_vagas(int vagas[MAX_RESERVAS][2][2], int n_vagas, char op){
     int i;
+    if(n_vagas==0){
+        if(op=='M'){
+            printf("Reserva disponivel entre as %02d:%02d e as %02d:%02d\n",8,0,17,0);
+        } else if(op=='L'){
+            printf("Reserva disponivel entre as %02d:%02d e as %02d:%02d\n",8,0,17,30);
+        }
+    }
     for(i=0;i<n_vagas;i++){
         printf("Reserva disponivel entre as %02d:%02d e as %02d:%02d\n", vagas[i][0][0], vagas[i][0][1], vagas[i][1][0], vagas[i][1][1]);
     }
+}
+
+int disponibilidade(reservas lista_reservas, char op, int hora,int min, int dia, int mes, int ano){
+    reservas aux=lista_reservas->next;
+    if(hora_valida(dia, mes, ano, hora, min)==1){
+        return 1;
+    }
+    while(aux!=NULL){
+        if(aux->dia==dia && aux->mes==mes && aux->ano==ano){
+            if(op=='M' && aux->op==op){
+                if((hora==aux->hora && min>=aux->min) || (hora+1==aux->hora && min>=aux->min) || (aux->hora+1==hora && min<=aux->min)){
+                    return 1;
+                } else if(hora==17 && min>0){
+                    return 1;
+                }
+            } else if(op=='L' && aux->op== op){
+                if(hora==17  && min>30){
+                    return 1;
+                }
+                if(min+30>60){
+                    if((hora==aux->hora && min>=aux->min && min<=aux->min+30) || (hora+1==aux->hora &&  min-30>=aux->min && min-30<=aux->min+30) || (aux->min+30>60 && hora==aux->hora && min>=aux->min && min-30 <=aux->min-30)){
+                        return 1;
+                    }
+                } else if(min+30==60){
+                    if((hora==aux->hora && min>=aux->min && min<= aux->min+30) || (hora==aux->hora && min+30>=aux->min && min+30<= aux->min+30) || (aux->min+30>60 && hora+1==aux->hora+1 && min<=aux->min-30)){
+                        return 1;
+                    }
+                } else if(min+30<60){
+                    if((hora==aux->hora && min+30>=aux->min && min+30<=aux->min+30) || (hora==aux->hora && min>=aux->min && min<=aux->min+30) || (aux->min+30>60 && hora==aux->hora+1 && min<=aux->min-30)){
+                        return 1;
+                    }
+                }
+            }
+        }
+        aux=aux->next;
+    }
+    return 0;
 }

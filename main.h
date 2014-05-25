@@ -1,6 +1,7 @@
 #define MAX 101
 #define MAX_DATA 10
 
+void load(reservas lista_reservas, prereservas lista_pre);
 void menu(reservas lista_reservas, prereservas lista_pre);
 void reserva(reservas lista_reservas, prereservas lista_pre);
 void cancela(reservas lista_reservas, prereservas lista_pre);
@@ -11,7 +12,6 @@ void cancelar_pre(prereservas lista_pre, char op);
 void concluida(reservas lista_reservas, prereservas lista_pre);
 void conclusao(reservas lista_reservas, prereservas lista_pre, char op);
 int encaixe(rnode* first, int hora_a, int min_a, char op);
-int disponibilidade(reservas lista_reservas, char op, int hora,int min, int dia, int mes, int ano);
 int hora_valida(int dia, int mes, int ano, int hora, int min);
 void get_time(int *hora, int *min);
 void update_reservas(reservas lista);

@@ -10,6 +10,13 @@
 int main(){
     reservas lista_reservas= create_reservas();
     prereservas lista_pre= create_pre_reservas();
+    load(lista_reservas, lista_pre);
+    clear_screen();
+    menu(lista_reservas, lista_pre);
+    return 0;
+}
+
+void load(reservas lista_reservas, prereservas lista_pre){
     print_informacao(lista_reservas, lista_pre);
     int reservas_lavagem=0;
     int reservas_manutencao=0;
@@ -17,9 +24,6 @@ int main(){
     if(reservas_lavagem+reservas_manutencao>1){
         sort_reservas(lista_reservas, 1);
     }
-    clear_screen();
-    menu(lista_reservas, lista_pre);
-    return 0;
 }
 
 void menu(reservas lista_reservas, prereservas lista_pre){
@@ -266,6 +270,7 @@ void reservar(reservas lista_reservas, prereservas lista_pre, char op){
     int min;
     printf("Nome: ");
     fgets(nome, MAX-1, stdin);
+    clear_buffer();
     for (i = 0; nome[i] != 0; ++i) {
         if (nome[i] == '\n') {
             nome[i] = '\0';
@@ -347,6 +352,7 @@ void cancelar(reservas lista_reservas, prereservas lista_pre, char op){
         printf("Cancelar reserva de lavagem em nome de: ");
     }
     fgets(nome, MAX-1, stdin);
+    clear_buffer();
     for (i= 0; nome[i]!= 0; ++i) {
         if (nome[i] == '\n') {
             nome[i] = '\0';
@@ -361,7 +367,6 @@ void cancelar(reservas lista_reservas, prereservas lista_pre, char op){
     min=ant->next->min;
     delete_reserva(ant);
     update_apos_cancelamento(lista_reservas, lista_pre, hora, min, op);
-
 }
 
 void cancelar_pre(prereservas lista_pre, char op){
@@ -374,6 +379,7 @@ void cancelar_pre(prereservas lista_pre, char op){
         printf("Cancelar pré-reserva de lavagem em nome de: ");
     }
     fgets(nome, MAX-1, stdin);
+    clear_buffer();
     for (i= 0; nome[i]!= 0; ++i) {
         if (nome[i] == '\n') {
             nome[i] = '\0';
@@ -385,43 +391,6 @@ void cancelar_pre(prereservas lista_pre, char op){
         return;
     }
     delete_pre(ant);
-}
-
-int disponibilidade(reservas lista_reservas, char op, int hora,int min, int dia, int mes, int ano){
-    reservas aux=lista_reservas->next;
-    if(hora_valida(dia, mes, ano, hora, min)==1){
-        return 1;
-    }
-    while(aux!=NULL){
-        if(aux->dia==dia && aux->mes==mes && aux->ano==ano){
-            if(op=='M' && aux->op==op){
-                if((hora==aux->hora && min>=aux->min) || (hora+1==aux->hora && min>=aux->min) || (aux->hora+1==hora && min<=aux->min)){
-                    return 1;
-                } else if(hora==17 && min>0){
-                    return 1;
-                }
-            } else if(op=='L' && aux->op== op){
-                if(hora==17  && min>30){
-                    return 1;
-                }
-                if(min+30>60){
-                    if((hora==aux->hora && min>=aux->min && min<=aux->min+30) || (hora+1==aux->hora &&  min-30>=aux->min && min-30<=aux->min+30) || (aux->min+30>60 && hora==aux->hora && min>=aux->min && min-30 <=aux->min-30)){
-                        return 1;
-                    }
-                } else if(min+30==60){
-                    if((hora==aux->hora && min>=aux->min && min<= aux->min+30) || (hora==aux->hora && min+30>=aux->min && min+30<= aux->min+30) || (aux->min+30>60 && hora+1==aux->hora+1 && min<=aux->min-30)){
-                        return 1;
-                    }
-                } else if(min+30<60){
-                    if((hora==aux->hora && min+30>=aux->min && min+30<=aux->min+30) || (hora==aux->hora && min>=aux->min && min<=aux->min+30) || (aux->min+30>60 && hora==aux->hora+1 && min<=aux->min-30)){
-                        return 1;
-                    }
-                }
-            }
-        }
-        aux=aux->next;
-    }
-    return 0;
 }
 
 int hora_valida(int dia, int mes, int ano, int hora, int min){
