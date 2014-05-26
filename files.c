@@ -74,13 +74,13 @@ void extrair_informacao_prereservas(prereservas lista_pre, char input[]) {
 	mes_prereserva = (input[5] - '0') * 10 + (input[6] - '0');
 	ano_prereserva = (input[8] - '0') * 1000 + (input[9] - '0') * 100 + (input[10] - '0') * 10 + (input[11] - '0');
 
-	dia = (input[12] - '0') * 10 + (input[13] - '0');
-	mes = (input[15] - '0') * 10 + (input[16] - '0');
-	ano = (input[17] - '0') * 1000 + (input[18] - '0') * 100 + (input[19] - '0') * 10 + (input[20] - '0');
-	hora = (input[21] - '0') * 10 + (input[22] - '0');
-	min = (input[24] - '0') * 10 + (input[25] - '0');
+	dia = (input[13] - '0') * 10 + (input[14] - '0');
+	mes = (input[16] - '0') * 10 + (input[17] - '0');
+	ano = (input[19] - '0') * 1000 + (input[20] - '0') * 100 + (input[21] - '0') * 10 + (input[22] - '0');
+	hora = (input[24] - '0') * 10 + (input[25] - '0');
+	min = (input[27] - '0') * 10 + (input[28] - '0');
 
-	for (i = 13; input[i] != 0; i++) {
+	for (i = 30; input[i] != 0; i++) {
 		if(input[i]=='\n'){
 			input[i]='\0';
 		}
