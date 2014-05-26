@@ -627,7 +627,7 @@ void update_apos_cancelamento(reservas lista_reservas, prereservas lista_pre,int
             }
             go=go->next;
         }
-        insert_reserva(lista_reservas, op, aux->dia, aux->mes, aux->ano, hora, min, aux->nome);
+        insert_reserva(lista_reservas, op, aux->dia_prereserva, aux->mes_prereserva, aux->ano_prereserva, hora, min, aux->nome);
         ant= find_ant_pre(lista_pre, aux->nome, op);
         delete_pre(ant);
         update_reservas(lista_reservas);
@@ -640,7 +640,7 @@ void update_apos_cancelamento(reservas lista_reservas, prereservas lista_pre,int
             }
             go=go->next;
         }
-        insert_reserva(lista_reservas, op, aux->dia, aux->mes, aux->ano, hora, min, aux->nome);
+        insert_reserva(lista_reservas, op, aux->dia_prereserva, aux->mes_prereserva, aux->ano_prereserva, hora, min, aux->nome);
         ant= find_ant_pre(lista_pre, aux->nome, op);
         delete_pre(ant);
         update_reservas(lista_reservas);
