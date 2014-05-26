@@ -212,7 +212,7 @@ void conclusao(reservas lista_reservas, prereservas lista_pre, char op){
         if(menu==1){
             delete_reserva(aux);
             if(encaixe(aux, hora_a, min_a, op)==0){
-                update_apos_cancelamento(lista_reservas, lista_pre, hora_a, min_a, op);
+                update_apos_cancelamento(lista_reservas, lista_pre, dia_a, mes_a, ano_a,hora_a, min_a, op);
             }
         } else {
             clear_screen();
@@ -268,6 +268,11 @@ void reservar(reservas lista_reservas, prereservas lista_pre, char op){
     int ano;
     int hora;
     int min;
+    int dia_a;
+    int mes_a;
+    int ano_a;
+    int hora_a;
+    int min_a;
     printf("Nome: ");
     fgets(nome, MAX-1, stdin);
     for (i = 0; nome[i] != 0; ++i) {
@@ -296,10 +301,12 @@ void reservar(reservas lista_reservas, prereservas lista_pre, char op){
         scanf("%d", &menu);
         getchar();
         if(menu==1){
-            pre_reservado= insert_pre_reserva(lista_pre, op, dia, mes, ano, nome);
+            get_time(&hora_a, &min_a);
+            get_date(&dia_a, &mes_a, &ano_a);
+            pre_reservado= insert_pre_reserva(lista_pre, op, dia, mes, ano, nome, dia_a, mes_a, ano_a, hora_a, min_a);
             if(pre_reservado==0){
                 clear_screen();
-                printf("Pré-Reserva efectuada com sucesso!");
+                printf("Pré-Reserva efectuada com sucesso!\n");
                 update_prereservas(lista_pre);
                 return;
             } else {
@@ -345,6 +352,9 @@ void cancelar(reservas lista_reservas, prereservas lista_pre, char op){
     int i;
     int hora;
     int min;
+    int dia;
+    int mes;
+    int ano;
     if(op=='M'){
         printf("Cancelar reserva de manutenção em nome de: ");
     } else {
@@ -363,8 +373,11 @@ void cancelar(reservas lista_reservas, prereservas lista_pre, char op){
     }
     hora= ant->next->hora;
     min=ant->next->min;
+    dia=ant->next->dia;
+    mes=ant->next->mes;
+    ano=ant->next->ano;
     delete_reserva(ant);
-    update_apos_cancelamento(lista_reservas, lista_pre, hora, min, op);
+    update_apos_cancelamento(lista_reservas, lista_pre, dia, mes, ano, hora, min, op);
 }
 
 void cancelar_pre(prereservas lista_pre, char op){
@@ -424,15 +437,16 @@ void update_reservas(reservas lista) {
     if(reservas_lavagem+reservas_manutencao>1){
         sort_reservas(lista, 1);
     }
-    if(reservas_lavagem+reservas_manutencao>0){
-        por_no_ficheiro_reservas(lista);
-    }
+    por_no_ficheiro_reservas(lista);
 }
 
 void update_prereservas(prereservas lista) {
     int pre_lavagem=0;
     int pre_manutencao=0;
     count_pre(lista, &pre_lavagem, &pre_manutencao);
+    if(pre_lavagem+pre_manutencao>1){
+        sort_pre(lista, 1);
+    }
     por_no_ficheiro_prereserva(lista);
 }
 
@@ -598,7 +612,7 @@ void imprimir_pre(prereservas lista_pre, char op){
     }
 }
 
-void update_apos_cancelamento(reservas lista_reservas, prereservas lista_pre, int hora, int min, char op){
+void update_apos_cancelamento(reservas lista_reservas, prereservas lista_pre,int dia, int mes, int ano, int hora, int min, char op){
     prereservas go= lista_pre->next;
     prnode* aux;
     prnode* ant;
@@ -607,8 +621,9 @@ void update_apos_cancelamento(reservas lista_reservas, prereservas lista_pre, in
     count_pre(lista_pre, &pre_lavagem, &pre_manutencao);
     if(op=='L' && pre_lavagem>0){
         while(go!=NULL){
-            if(go->op==op){
+            if(go->op==op && go->dia_prereserva==dia && go->mes_prereserva==mes && go->ano_prereserva==ano){
                 aux=go;
+                break;
             }
             go=go->next;
         }
@@ -619,8 +634,9 @@ void update_apos_cancelamento(reservas lista_reservas, prereservas lista_pre, in
         update_prereservas(lista_pre);
     } else if(op='M' && pre_manutencao>0){
         while(go!=NULL){
-            if(go->op==op){
+            if(go->op==op && go->dia_prereserva==dia && go->mes_prereserva==mes && go->ano_prereserva==ano){
                 aux=go;
+                break;
             }
             go=go->next;
         }

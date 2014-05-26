@@ -11,15 +11,16 @@ int verifica_vaga(reservas lista_reservas, char op, int dia, int mes, int ano){
     n_reservas= agrupar_reservas(lista_reservas, lreservas, op, dia, mes, ano);
     if(n_reservas>0){
         n_vagas=agrupar_vagas(lreservas, vagas, n_reservas, op);
-        mostra_vagas(vagas, n_vagas, op);
     } else {
         return 0;
     }
     if(n_vagas>0){
+        mostra_vagas(vagas, n_vagas, op);
         return 0;
     } else if(n_vagas==0 && n_reservas>0){
         return 1;
     } else {
+        mostra_vagas(vagas, n_vagas, op);
         return 0;
     }
 }

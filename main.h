@@ -21,6 +21,6 @@ void get_date(int * dia, int * mes, int * ano);
 void listar(reservas lista_reservas, prereservas lista_pre);
 void imprimir_reservas(reservas lista_reservas, char op);
 void imprimir_pre(prereservas lista_pre, char op);
-void update_apos_cancelamento(reservas lista_reservas, prereservas lista_pre, int hora, int min, char op);
+void update_apos_cancelamento(reservas lista_reservas, prereservas lista_pre, int dia, int mes, int ano, int hora, int min, char op);
 void clear_buffer();
 void clear_screen();

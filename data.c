@@ -44,14 +44,19 @@ int insert_reserva(reservas r, char op, int dia, int mes, int ano, int hora, int
     return 1;
 }
 
-int insert_pre_reserva(prereservas pr, char op, int dia, int mes, int ano, char nome[]){
-    prnode*  ins;
+int insert_pre_reserva(prereservas pr, char op, int dia, int mes, int ano, char nome[], int dia_a, int mes_a, int ano_a, int hora_a, int min_a){
+    prnode*  ins; 
     ins= malloc(sizeof(prnode));
     if(ins!=NULL){
         ins->op= op;
-        ins->dia= dia;
-        ins->mes= mes;
-        ins->ano= ano;
+        ins->dia_prereserva= dia;
+        ins->mes_prereserva= mes;
+        ins->ano_prereserva= ano;
+        ins->ano= ano_a;
+        ins->mes=mes_a;
+        ins->dia=dia_a;
+        ins->hora=hora_a;
+        ins->min=min_a;
         strcpy(ins->nome, nome);
         ins->next= pr->next;
         pr->next= ins;
@@ -230,6 +235,10 @@ int troca_pre(int menu, prereservas aux){
             return 1;
         } else if(aux->ano==aux->next->ano && aux->mes==aux->next->mes && aux->dia>aux->next->dia){
             return 1;
+        } else if(aux->ano==aux->next->ano && aux->mes==aux->next->mes && aux->dia==aux->next->dia && aux->hora>aux->next->hora){
+            return 1;
+        } else if(aux->ano==aux->next->ano && aux->mes==aux->next->mes && aux->dia==aux->next->dia && aux->hora==aux->next->hora && aux->min > aux->next->min){
+            return 1;
         }
     } else {
         if(aux->ano>aux->next->ano){
@@ -237,6 +246,10 @@ int troca_pre(int menu, prereservas aux){
         } else if(aux->ano==aux->next->ano && aux->mes<aux->next->mes) {
             return 1;
         } else if(aux->ano==aux->next->ano && aux->mes==aux->next->mes && aux->dia<aux->next->dia){
+            return 1;
+        } else if(aux->ano==aux->next->ano && aux->mes==aux->next->mes && aux->dia==aux->next->dia && aux->hora<aux->next->hora){
+            return 1;
+        } else if(aux->ano==aux->next->ano && aux->mes==aux->next->mes && aux->dia==aux->next->dia && aux->hora==aux->next->hora && aux->min<aux->next->min){
             return 1;
         }
     }

@@ -59,15 +59,26 @@ void extrair_informacao_reservas(reservas lista_reservas, char input[]) {
 
 void extrair_informacao_prereservas(prereservas lista_pre, char input[]) {
 	int i;
-	int dia, mes, ano, hora, min;
+	int dia; 
+	int mes; 
+	int ano;
+	int hora; 
+	int min;
+	int dia_prereserva;
+	int mes_prereserva;
+	int ano_prereserva;
 	int counter = 0;
 	char nome[MAX];
 	
-	dia = (input[2] - '0') * 10 + (input[3] - '0');
+	dia_prereserva = (input[2] - '0') * 10 + (input[3] - '0');
+	mes_prereserva = (input[5] - '0') * 10 + (input[6] - '0');
+	ano_prereserva = (input[8] - '0') * 1000 + (input[9] - '0') * 100 + (input[10] - '0') * 10 + (input[11] - '0');
 
-	mes = (input[5] - '0') * 10 + (input[6] - '0');
-
-	ano = (input[8] - '0') * 1000 + (input[9] - '0') * 100 + (input[10] - '0') * 10 + (input[11] - '0');
+	dia = (input[12] - '0') * 10 + (input[13] - '0');
+	mes = (input[15] - '0') * 10 + (input[16] - '0');
+	ano = (input[17] - '0') * 1000 + (input[18] - '0') * 100 + (input[19] - '0') * 10 + (input[20] - '0');
+	hora = (input[21] - '0') * 10 + (input[22] - '0');
+	min = (input[24] - '0') * 10 + (input[25] - '0');
 
 	for (i = 13; input[i] != 0; i++) {
 		if(input[i]=='\n'){
@@ -78,9 +89,8 @@ void extrair_informacao_prereservas(prereservas lista_pre, char input[]) {
 	}
 	nome[counter] = '\0';
 
-	insert_pre_reserva(lista_pre, input[0], dia, mes, ano, nome);
+	insert_pre_reserva(lista_pre, input[0], dia_prereserva, mes_prereserva, ano_prereserva, nome, dia, mes, ano, hora, min);
 }
-
 
 void por_no_ficheiro_reservas(reservas lista) {
 	FILE *fp;
@@ -100,7 +110,7 @@ void por_no_ficheiro_prereserva(prereservas lista) {
 
 	fp = fopen("prereservas.txt", "w");
 	while(aux!=NULL) {
-		fprintf(fp, "%c %02d %02d %04d %s\n", aux->op, aux->dia, aux->mes, aux->ano, aux->nome);
+		fprintf(fp, "%c %02d %02d %04d %02d %02d %04d %02d %02d %s\n", aux->op, aux->dia_prereserva, aux->mes_prereserva, aux->ano_prereserva, aux->dia, aux->mes, aux->ano, aux->hora, aux->min, aux->nome);
 		aux = aux -> next;
 	}
 	fclose(fp);

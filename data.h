@@ -15,9 +15,14 @@ typedef struct rnode {
 typedef struct prnode* prereservas;
 typedef struct prnode{
     char op;
+    int dia_prereserva;
+    int mes_prereserva;
+    int ano_prereserva;
     int dia;
     int mes;
     int ano;
+    int hora;
+    int min;
     char nome[MAX];
     prereservas next;
 }prnode;
@@ -25,7 +30,7 @@ typedef struct prnode{
 reservas create_reservas();
 prereservas create_pre_reservas();
 int insert_reserva(reservas r, char op, int dia, int mes, int ano, int hora, int min, char nome[]);
-int insert_pre_reserva(prereservas pr, char op, int dia, int mes, int ano, char nome[]);
+int insert_pre_reserva(prereservas pr, char op, int dia, int mes, int ano, char nome[], int dia_a, int mes_a, int ano_a, int hora_a, int min_a);
 rnode* find_ant(reservas lista_reservas, char nome[], char op);
 void delete_reserva(rnode* anterior);
 prnode* find_ant_pre(prereservas lista_reservas, char nome[], char op);
