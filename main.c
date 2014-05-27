@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 #include "data.h"
 #include "files.h"
@@ -29,7 +30,7 @@ void load(reservas lista_reservas, prereservas lista_pre){
 void menu(reservas lista_reservas, prereservas lista_pre){
     int menu=9;
     do{
-        printf("Menu:\n1- Reservar lavagem ou manutenção\n2- Cancelar reserva de lavagem ou manutenção\n3- Cancelar pré-reserva de lavagem ou manutenção\n4- Listar reservas e pré-reservas\n5- Lavagem ou Manutenção Concluida\n0- Sair\nO que fazer? ");
+        printf("Menu:\n1- Reservar lavagem ou manutenção\n2- Cancelar reserva de lavagem ou manutenção\n3- Cancelar pré-reserva de lavagem ou manutenção\n4- Listar reservas e pré-reservas\n5- Listar reservas e pré-reservas associadas a um cliente\n6- Lavagem ou Manutenção Concluida\n0- Sair\nO que fazer? ");
         scanf("%d", &menu); 
         getchar(); //eliminar o '\n' não lido pelo scanf
         switch(menu){
@@ -56,6 +57,10 @@ void menu(reservas lista_reservas, prereservas lista_pre){
                 listar(lista_reservas, lista_pre);
                 break;
             case 5:
+                clear_screen();
+                listar_cliente(lista_reservas, lista_pre);
+                break;
+            case 6:
                 clear_screen();
                 concluida(lista_reservas, lista_pre);
                 break;
@@ -585,6 +590,54 @@ void listar(reservas lista_reservas, prereservas lista_pre){
         default:
             clear_screen();
             printf("%d não é uma opção válida! A regressar ao menu principal...\n", menu);
+    }
+}
+
+void listar_cliente(reservas lista_reservas, prereservas lista_pre){
+    char nome[MAX];
+    int i;
+    reservas aux= lista_reservas->next;
+    prereservas auxpre= lista_pre->next;
+    int reservas_lavagem=0;
+    int reservas_manutencao=0;
+    int pre_lavagem=0;
+    int pre_manutencao=0;
+    count_reservas(lista_reservas, &reservas_lavagem, &reservas_manutencao);
+    if(reservas_lavagem+reservas_manutencao==0){
+        printf("Nenhuma reserva para listar\n");
+        return;
+    }
+    printf("Nome do cliente: ");
+    fgets(nome, MAX-1, stdin);
+    for (i = 0; nome[i] != 0; ++i) {
+        if (nome[i] == '\n') {
+            nome[i] = '\0';
+        }
+    }
+    printf("Reservas em nome de %s:\n", nome);
+    while(aux!=NULL){
+        if(strcmp(nome, aux->nome)==0){
+            if(aux->op=='M'){
+                printf("Reserva de manutenção: %02d/%02d/%04d pelas %02d:%02d\n\n", aux->dia, aux->mes, aux->ano, aux->hora, aux->min);
+            } else if(aux->op=='L'){
+                printf("Reserva de lavagem: %02d/%02d/%04d pelas %02d:%02d\n\n", aux->dia, aux->mes, aux->ano, aux->hora, aux->min);
+            }
+        }
+        aux=aux->next;
+    }
+    count_pre(lista_pre, &pre_lavagem, &pre_manutencao);
+    if(pre_lavagem+pre_manutencao==0){
+        return;
+    }
+    printf("Pré-Reservas em nome de %s:\n", nome);
+    while(auxpre!=NULL){
+        if(strcmp(nome, auxpre->nome)==0){
+            if(auxpre->op=='M'){
+                printf("Pré-Reserva de manutenção: %02d/%02d/%04d\n\n", auxpre->dia_prereserva, auxpre->mes_prereserva, auxpre->ano_prereserva);
+            } else if(auxpre->op=='L'){
+                printf("Pré-Reserva de lavagem: %02d/%02d/%04d\n\n", auxpre->dia_prereserva, auxpre->mes_prereserva, auxpre->ano_prereserva);
+            }
+        }
     }
 }
 
